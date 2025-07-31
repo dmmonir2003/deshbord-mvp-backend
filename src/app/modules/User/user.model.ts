@@ -9,14 +9,9 @@ import { TUser, UserModel } from './user.interface';
 const userSchema = new Schema<TUser, UserModel>(
   {
     name: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+      trim: true,
     },
     contactNo: {
       type: String,
@@ -27,9 +22,9 @@ const userSchema = new Schema<TUser, UserModel>(
       required: true,
       unique: true,
     },
-    subscriberId: {
+    project: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Project',
     },
     password: {
       type: String,
@@ -41,7 +36,7 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ['client', 'superAdmin', 'admin', 'subscriber'],
+      enum: ['client', 'superAdmin', 'basicAdmin', 'primeAdmin'],
       default: 'client',
     },
     profileImg : {
@@ -52,16 +47,16 @@ const userSchema = new Schema<TUser, UserModel>(
       type: Boolean,
       default: false,
     },
-    propertyPostCode: {
+    postCode: {
       type: String,
     },
-    propertyAddress: {
+    address: {
       type: String,
     },
     status: {
       type: String,
       enum: Object.values(UserStatus),
-      default: 'interested',
+      default: 'active',
     },
     isDeleted: {
       type: Boolean,

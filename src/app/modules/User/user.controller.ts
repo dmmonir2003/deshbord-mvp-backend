@@ -6,8 +6,8 @@ import { UserServices } from './user.service';
 // import sendImageToCloudinary from '../../utils/cloudinary';
 
 const createUser = catchAsync(async (req, res) => {
-  const { user: userData } = req.body;
-  const result = await UserServices.createUserIntoDB(userData, req.user);
+  const userData= req.body;
+  const result = await UserServices.createUserIntoDB(userData, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -18,14 +18,8 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const getMe = catchAsync(async (req, res) => {
-  // console.log('getMe called');
   const { userEmail } = req.user;
-  console.log('getMe called', userEmail);
-  // const { userEmail, role } = req.user;
-
   const result = await UserServices.getMe(userEmail);
-  // const result = await UserServices.getMe(userEmail, role);
-  console.log('getMe data', result);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -36,10 +30,7 @@ const getMe = catchAsync(async (req, res) => {
 });
 const getSingleUser = catchAsync(async (req, res) => {
   const { id } = req.params;
-  // const { userEmail, role } = req.user;
-
   const result = await UserServices.getSingleUserIntoDB(id);
-  // const result = await UserServices.getMe(userEmail, role);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -49,19 +40,19 @@ const getSingleUser = catchAsync(async (req, res) => {
   });
 });
 
-const getAllUsersForSubscriber = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllUsersForSubscriberFromDB(req.query, req.user);
+// const getAllUsersForSubscriber = catchAsync(async (req, res) => {
+//   const result = await UserServices.getAllUsersForSubscriberFromDB(req.query, req.user);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Users are retrieved succesfully',
-    meta: result.meta,
-    data: result.result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'Users are retrieved succesfully',
+//     meta: result.meta,
+//     data: result.result,
+//   });
+// });
 const getAllUsers = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllUsersFromDB(req.query, req.user);
+  const result = await UserServices.getAllUsersFromDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -72,20 +63,19 @@ const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
-const getUsersMonthly = catchAsync(async (req, res) => {
-  const result = await UserServices.getUsersMonthlyFromDB(req.user);
+// const getUsersMonthly = catchAsync(async (req, res) => {
+//   const result = await UserServices.getUsersMonthlyFromDB(req.user);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Users are retrieved succesfully',
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'Users are retrieved succesfully',
+//     data: result,
+//   });
+// });
 
 const changeStatus = catchAsync(async (req, res) => {
   const id = req.params.id;
-
   const result = await UserServices.changeStatus(id, req.body);
 
   sendResponse(res, {
@@ -98,7 +88,7 @@ const changeStatus = catchAsync(async (req, res) => {
 
 const updateUser = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { user } = req.body;
+  const user = req.body;
   const result = await UserServices.updateUserIntoDB(id, user, req.file);
 
   sendResponse(res, {
@@ -121,9 +111,7 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 export const UserControllers = {
-  getAllUsersForSubscriber,
   getSingleUser,
-  getUsersMonthly,
   deleteUser,
   updateUser,
   createUser,

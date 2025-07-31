@@ -11,28 +11,39 @@ import { uploadFileS3 } from '../../utils/UploaderS3';
 const router = express.Router();
 router.post(
   '/create-user',
-  auth(USER_ROLE.superAdmin,  USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin),
+    uploadFileS3(true).single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.data) {
+      try {
+        req.body = JSON.parse(req.body.data);
+      } catch (error) {
+        next(error);
+      }
+    }
+    next();
+  },
   validateRequest(UserValidation.createUserValidationSchema),
-    UserControllers.createUser,
+  UserControllers.createUser,
 );
 
 router.get(
   '/me',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.client, USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.primeAdmin),
   UserControllers.getMe,
 );
 
-router.get(
-  '/for-subscriber',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
-  UserControllers.getAllUsersForSubscriber,
-);
+// router.get(
+//   '/for-subscriber',
+//   auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
+//   UserControllers.getAllUsersForSubscriber,
+// );
 
-router.get(
-  '/users-monthly',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
-  UserControllers.getUsersMonthly,
-);
+// router.get(
+//   '/users-monthly',
+//   auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+//   UserControllers.getUsersMonthly,
+// );
 // router.get(
 //   '/users-monthly-subscriber',
 //   auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
@@ -41,32 +52,32 @@ router.get(
 
 router.get(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin),
   UserControllers.getSingleUser,
 );
 
 router.post(
   '/change-status/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin),
 //   validateRequest(UserValidation.changeStatusValidationSchema),
   UserControllers.changeStatus,
 );
 
 router.get(
   '/',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin),
   UserControllers.getAllUsers,
 );
 
 router.delete(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin),
   UserControllers.deleteUser,
 );
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.client, USER_ROLE.subscriber),
+  auth(USER_ROLE.superAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.primeAdmin),
   uploadFileS3(true).single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
@@ -78,6 +89,7 @@ router.patch(
     }
     next();
   },
+  validateRequest(UserValidation.updateUserValidationSchema),
   UserControllers.updateUser,
 );
 
