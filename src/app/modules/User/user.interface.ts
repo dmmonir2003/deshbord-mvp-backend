@@ -2,23 +2,19 @@
 import { Model, Types } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
-export interface TUser {
-  // [x: string]: any;
-  name: {
-    firstName: string;
-    lastName: string;
-  };
+export interface TUser { 
+  name: string;
   email: string;
-  subscriberId?: Types.ObjectId;
-  password: string;
-  passwordChangedAt?: Date;
   contactNo: string;
-  profileImg?: string;
+  password: string;
   otpVerified: boolean;
-  propertyAddress?: string;
-  propertyPostCode?: string;
-  role: 'client' | 'superAdmin' | 'admin' | 'subscriber';
-  status?: 'contacted' | 'interested' | 'agreed' | 'notInterested';
+  passwordChangedAt?: Date;
+  profileImg?: string;
+  project?: Types.ObjectId;
+  address?: string;
+  postCode?: string;
+  role: 'client' | 'superAdmin' | 'basicAdmin' | 'basicAdmin';
+  status?: 'active' | 'blocked';
   isDeleted: boolean;
 }
 export interface UserModel extends Model<TUser> {
