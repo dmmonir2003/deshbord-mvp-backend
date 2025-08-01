@@ -7,6 +7,8 @@ import { PrivacyRoutes } from '../modules/Privacy/Privacy.route';
 import { TermRoutes } from '../modules/Term/Term.route';
 import { ContactRoutes } from '../modules/Contact/Contact.route';
 import { NotificationRoutes } from '../modules/Notification/Notification.route';
+import { ProjectRoutes } from '../modules/Project/Project.route';
+
 const router = Router();
 
 const moduleRoutes = [
@@ -17,6 +19,10 @@ const moduleRoutes = [
   {
     path: '/auth',
     route: AuthRoutes,
+  },
+  {
+    path: '/projects',
+    route: ProjectRoutes, // Assuming you have a ProjectRoutes defined  
   },
   {
     path: '/otps',

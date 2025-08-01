@@ -154,6 +154,9 @@ const refreshToken = async (token: string) => {
 };
 
 const forgetPassword = async (userEmail: string) => {
+
+  console.log('userEmail', userEmail);
+
   // checking if the user is exist
   const user = await User.isUserExistsByCustomEmail(userEmail);
 
@@ -169,11 +172,11 @@ const forgetPassword = async (userEmail: string) => {
   }
 
   // checking if the user is blocked
-  // const userStatus = user?.status;
+  const userStatus = user?.status;
 
-  // if (userStatus === 'blocked') {
-  //   throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
-  // }
+  if (userStatus === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
+  }
   
   // const jwtPayload = {
   //   userEmail: user.email,
