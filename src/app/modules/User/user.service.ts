@@ -34,9 +34,6 @@ const getMe = async (userEmail: string) => {
 };
 
 const getSingleUserIntoDB = async (id: string) => {
-
-  console.log('id',id);
-
   const result = await User.findOne({ _id: id, isDeleted: false });
 
   return result;
