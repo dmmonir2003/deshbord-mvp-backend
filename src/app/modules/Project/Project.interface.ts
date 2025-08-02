@@ -13,8 +13,13 @@ export type TProject = {
   type: string;
   startDate: string;
   endDate: string;
-  contractFile: string;
+  contractFile?: string;
   status: 'pending' | 'ongoing' | 'completed' | 'cancelled';
+  sharedWith?: {
+    userId: Types.ObjectId;
+    role: 'client' | 'basicAdmin';
+    sharedBy: Types.ObjectId;
+  }[];
   value: number;
   isDeleted: boolean;
 };
