@@ -14,13 +14,20 @@ const ProjectSchema = new Schema<TProject, ProjectModel>(
     type: { type: String, required: true },
     startDate: { type: String, required: true },
     endDate: { type: String, required: true },
-    contractFile: { type: String, required: true },
+    contractFile: { type: String },
     value: { type: Number, required: true },
     status: {
       type: String,
       enum: ['pending', 'ongoing', 'completed', 'cancelled'],
       default: 'pending'
     },
+    sharedWith: [
+    {
+      userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      role: { type: String, enum: ['client', 'basicAdmin'], required: true },
+      sharedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    }
+  ],
     isDeleted: { type: Boolean, required: true, default: false },
   },
   {

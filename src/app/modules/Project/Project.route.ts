@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-project',
-  auth(USER_ROLE.superAdmin),
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
     uploadFileS3(true).single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
@@ -26,6 +26,18 @@ router.post(
   ProjectControllers.createProject,
 );
 
+
+router.post(
+  '/:id/share',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  ProjectControllers.shareProject
+);
+router.post(
+  '/:id/unshare',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  ProjectControllers.unShareProject
+);
+
 router.get(
   '/:id',
   ProjectControllers.getSingleProject,
@@ -33,6 +45,18 @@ router.get(
 
 router.patch(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+    uploadFileS3(true).single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.data) {
+      try {
+        req.body = JSON.parse(req.body.data);
+      } catch (error) {
+        next(error);
+      }
+    }
+    next();
+  },
   validateRequest(updateProjectValidationSchema),
   ProjectControllers.updateProject,
 );
@@ -44,6 +68,7 @@ router.delete(
 
 router.get(
   '/',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
   ProjectControllers.getAllProjects,
 );
 

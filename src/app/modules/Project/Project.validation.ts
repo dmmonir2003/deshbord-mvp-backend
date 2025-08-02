@@ -22,7 +22,7 @@ export const createProjectValidationSchema = z.object({
 
 export const updateProjectValidationSchema = z.object({
   body: z.object({
-      projectName: z.string().optional(),
+  projectName: z.string().optional(),
   clientName: z.string().optional(),
   clientEmail: z.string().email().optional(),
   clientId: z

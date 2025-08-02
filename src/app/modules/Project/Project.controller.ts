@@ -15,6 +15,31 @@ const createProject = catchAsync(async (req, res) => {
   });
 });
 
+const shareProject = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {sharedWith} = req.body;
+  const result = await ProjectServices.shareProjectIntoDB(id, sharedWith, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+const unShareProject = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {userId } = req.body;
+  const result = await ProjectServices.unShareProjectIntoDB(id, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+
 const getSingleProject = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await ProjectServices.getSingleProjectFromDB(id);
@@ -28,7 +53,7 @@ const getSingleProject = catchAsync(async (req, res) => {
 });
 
 const getAllProjects = catchAsync(async (req, res) => {
-  const result = await ProjectServices.getAllProjectsFromDB(req.query);
+  const result = await ProjectServices.getAllProjectsFromDB(req.query, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -70,4 +95,6 @@ export const ProjectControllers = {
   getAllProjects,
   updateProject,
   deleteProject,
+  shareProject,
+  unShareProject
 };

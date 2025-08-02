@@ -3,17 +3,17 @@ import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { PROJECT_SEARCHABLE_FIELDS } from './Project.constant';
-import mongoose from 'mongoose';
+// import mongoose, { Schema } from 'mongoose';
 import { TProject } from './Project.interface';
 import { Project } from './Project.model';
+import { User } from '../User/user.model';
+import mongoose, { Types } from 'mongoose';
 
 const createProjectIntoDB = async (
   payload: TProject,
   file?: any
 ) => {
-
    if(file) {
-    console.log('File uploaded:', file);
     payload.contractFile = file.location;
   }
 
@@ -26,7 +26,99 @@ const createProjectIntoDB = async (
   return result;
 };
 
-const getAllProjectsFromDB = async (query: Record<string, unknown>) => {
+
+const shareProjectIntoDB = async (
+  projectId: string,
+  sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
+  user?: any
+) => {
+  const { userEmail } = user;
+
+  const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
+    (user: any) => user?._id
+  );
+
+  if (!sharedBy) {
+    throw new Error('Shared by user not found');
+  }
+
+  const sharedEntries = sharedWith.map(entry => ({
+    userId: new Types.ObjectId(entry.userId),
+    role: entry.role,
+    sharedBy: new Types.ObjectId(sharedBy),
+  }));
+
+  const project = await Project.findByIdAndUpdate(
+    projectId,
+    { $addToSet: { sharedWith: { $each: sharedEntries } } },
+    { new: true }
+  );
+
+  if (!project) {
+    throw new Error('Project not found or update failed');
+  }
+
+  return project;
+};
+const unShareProjectIntoDB = async (
+  projectId : string,
+  userId: string,
+) => {
+ const updatedProject = await Project.findByIdAndUpdate(
+    projectId,
+    {
+      $pull: {
+        sharedWith: { userId: new Types.ObjectId(userId) }
+      }
+    },
+    { new: true }
+  );
+
+  if (!updatedProject) {
+    throw new Error('Project not found or unshare failed');
+  }
+
+  return updatedProject;
+};
+
+
+const getAllProjectsFromDB = async (query: Record<string, unknown>, user?: any) => {
+
+  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
+  const { userEmail } = user;
+  const userId = await User.isUserExistsByCustomEmail(userEmail).then(
+    (user: any) => user?._id
+  );
+
+  if (!userId) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }  
+
+     const ProjectQuery = new QueryBuilder(
+    Project.find({
+        sharedWith: {
+          $elemMatch: {
+            userId: new Types.ObjectId(userId),
+            role: user?.role
+          }
+        }
+      }),
+    query,
+  )
+    .search(PROJECT_SEARCHABLE_FIELDS)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await ProjectQuery.modelQuery;
+  const meta = await ProjectQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
+  
+  }else{
   const ProjectQuery = new QueryBuilder(
     Project.find(),
     query,
@@ -43,6 +135,7 @@ const getAllProjectsFromDB = async (query: Record<string, unknown>) => {
     result,
     meta,
   };
+  }
 };
 
 const getSingleProjectFromDB = async (id: string) => {
@@ -52,14 +145,16 @@ const getSingleProjectFromDB = async (id: string) => {
 };
 
 const updateProjectIntoDB = async (id: string, payload: any) => {
+
+console.log(id,'Update payload:', payload);
+
   const isDeletedService = await mongoose.connection
     .collection('projects')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) },
-      { projection: { isDeleted: 1, name: 1 } },
     );
 
-  if (!isDeletedService?.name) {
+  if (!isDeletedService) {
     throw new Error('Project not found');
   }
 
@@ -81,9 +176,9 @@ const updateProjectIntoDB = async (id: string, payload: any) => {
 };
 
 const deleteProjectFromDB = async (id: string) => {
-  const deletedService = await Project.findByIdAndUpdate(
+  const deletedService = await Project.findByIdAndDelete(
     id,
-    { isDeleted: true },
+    // { isDeleted: true },
     { new: true },
   );
 
@@ -100,4 +195,7 @@ export const ProjectServices = {
   getSingleProjectFromDB,
   updateProjectIntoDB,
   deleteProjectFromDB,
+  shareProjectIntoDB,
+  unShareProjectIntoDB
+
 };
