@@ -8,6 +8,8 @@ import { TermRoutes } from '../modules/Term/Term.route';
 import { ContactRoutes } from '../modules/Contact/Contact.route';
 import { NotificationRoutes } from '../modules/Notification/Notification.route';
 import { ProjectRoutes } from '../modules/Project/Project.route';
+import { AnalyticRoutes } from '../modules/Analytic/Analytic.route';
+import { QuoteRoutes } from '../modules/Quote/Quote.route';
 
 const router = Router();
 
@@ -48,6 +50,15 @@ const moduleRoutes = [
     path: '/notifications',
     route: NotificationRoutes,
   },
+  {
+    path: '/analytics',
+    route: AnalyticRoutes,
+  },
+  {
+    path: '/quotes',
+    route: QuoteRoutes, // Assuming you have a QuoteRoutes defined
+  },
+
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

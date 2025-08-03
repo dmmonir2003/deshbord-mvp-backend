@@ -1,1 +1,1 @@
-export const PROJECT_SEARCHABLE_FIELDS = ['name', 'description', 'atcCodes'];
+export const PROJECT_SEARCHABLE_FIELDS = ['projectName', 'clientEmail', 'contact'];
