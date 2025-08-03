@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
-import { TQuote, QuoteModel } from './Quote.interface';
+import { TInterim, InterimModel } from './Interim.interface';
 
-const QuoteSchema = new Schema<TQuote, QuoteModel>({
+const InterimSchema = new Schema<TInterim, InterimModel>({
   title: { type: String, required: true },
-  file: { type: String, required: true },
+  file: { type: String },
   projectId: {
     type: Schema.Types.ObjectId,
     ref: 'Project',
@@ -19,8 +19,8 @@ const QuoteSchema = new Schema<TQuote, QuoteModel>({
   isDeleted: { type: Boolean, default: false },
 });
 
-QuoteSchema.statics.isQuoteExists = async function (id: string) {
+InterimSchema.statics.isInterimExists = async function (id: string) {
   return await this.findOne({ _id: id, isDeleted: false });
 };
 
-export const Quote = model<TQuote, QuoteModel>('Quote', QuoteSchema);
+export const Interim = model<TInterim, InterimModel>('Interim', InterimSchema);

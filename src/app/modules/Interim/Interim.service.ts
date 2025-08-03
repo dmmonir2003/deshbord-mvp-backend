@@ -2,31 +2,31 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { QUOTE_SEARCHABLE_FIELDS } from './Quote.constant';
+import { INTERIM_SEARCHABLE_FIELDS } from './Interim.constant';
 import mongoose, { Types } from 'mongoose';
-import { TQuote } from './Quote.interface';
-import { Quote } from './Quote.model';
+import { TInterim } from './Interim.interface';
+import { Interim } from './Interim.model';
 import { User } from '../User/user.model';
 
-const createQuoteIntoDB = async (
-  payload: TQuote,
-  quoteFile: any,
+const createInterimIntoDB = async (
+  payload: TInterim,
+  file?: any
 ) => {
-
-  if(quoteFile){
-    payload.file = quoteFile.location as string;
+  if( file ) {
+    payload.file = file.location as string;
   }
 
-  const result = await Quote.create(payload);
+  const result = await Interim.create(payload);
   
   if (!result) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Quote');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Interim');
   }
 
   return result;
 };
 
-const shareQuoteIntoDB = async (
+
+const shareInterimIntoDB = async (
   quoteId: string,
   sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
   user?: any
@@ -47,7 +47,7 @@ const shareQuoteIntoDB = async (
     sharedBy: new Types.ObjectId(sharedBy),
   }));
 
-  const project = await Quote.findByIdAndUpdate(
+  const project = await Interim.findByIdAndUpdate(
     quoteId,
     { $addToSet: { sharedWith: { $each: sharedEntries } } },
     { new: true }
@@ -59,15 +59,24 @@ const shareQuoteIntoDB = async (
 
   return project;
 };
-const unShareQuoteIntoDB = async (
+const unShareInterimIntoDB = async (
   projectId : string,
-  userId: string,
+  userIds: string[],
 ) => {
- const updatedProject = await Quote.findByIdAndUpdate(
+
+console.log('Unsharing Interim with IDs:', userIds)
+
+  if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+    throw new Error('No user IDs provided for unsharing');
+  }
+  
+ const updatedProject = await Interim.findByIdAndUpdate(
     projectId,
     {
       $pull: {
-        sharedWith: { userId: new Types.ObjectId(userId) }
+        sharedWith: {
+          userId: { $in: userIds.map(id => new Types.ObjectId(id)) } // 🔄 remove multiple
+        }
       }
     },
     { new: true }
@@ -80,9 +89,7 @@ const unShareQuoteIntoDB = async (
   return updatedProject;
 };
 
-
-
-const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) => {
+const getAllInterimsFromDB = async (query: Record<string, unknown>, user?: any) => {
  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
   const { userEmail } = user;
   const userId = await User.isUserExistsByCustomEmail(userEmail).then(
@@ -94,7 +101,7 @@ const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) =>
   }  
 
      const ProjectQuery = new QueryBuilder(
-    Quote.find({
+    Interim.find({
         sharedWith: {
           $elemMatch: {
             userId: new Types.ObjectId(userId),
@@ -104,7 +111,7 @@ const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) =>
       }),
     query,
   )
-    .search(QUOTE_SEARCHABLE_FIELDS)
+    .search(INTERIM_SEARCHABLE_FIELDS)
     .filter()
     .sort()
     .paginate()
@@ -119,10 +126,10 @@ const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) =>
   
   }else{
   const ProjectQuery = new QueryBuilder(
-    Quote.find(),
+    Interim.find(),
     query,
   )
-    .search(QUOTE_SEARCHABLE_FIELDS)
+    .search(INTERIM_SEARCHABLE_FIELDS)
     .filter()
     .sort()
     .paginate()
@@ -135,85 +142,71 @@ const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) =>
     meta,
   };
   }
-
-  // const QuoteQuery = new QueryBuilder(
-  //   Quote.find(),
-  //   query,
-  // )
-  //   .search(QUOTE_SEARCHABLE_FIELDS)
-  //   .filter()
-  //   .sort()
-  //   .paginate()
-  //   .fields();
-
-  // const result = await QuoteQuery.modelQuery;
-  // const meta = await QuoteQuery.countTotal();
-  // return {
-  //   result,
-  //   meta,
-  // };
 };
 
-const getSingleQuoteFromDB = async (id: string) => {
-  const result = await Quote.findById(id);
+const getSingleInterimFromDB = async (id: string) => {
+  const result = await Interim.findById(id);
 
   return result;
 };
 
-const updateQuoteIntoDB = async (id: string, payload: any, files?: any) => {
+const updateInterimIntoDB = async (id: string, payload: any, file?: any) => {
 
-  if(files){
-    payload.file = files.location as string;
+
+if( file ) {
+    payload.file = file.location as string;
   }
 
+
+
   const isDeletedService = await mongoose.connection
-    .collection('quotes')
+    .collection('interims')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) },
-      // { projection: { isDeleted: 1, name: 1 } },
+
     );
 
   if (!isDeletedService) {
-    throw new Error('Quote not found');
+    throw new Error('Interim not found');
   }
 
   if (isDeletedService.isDeleted) {
-    throw new Error('Cannot update a deleted Quote');
+    throw new Error('Cannot update a deleted Interim');
   }
 
-  const updatedData = await Quote.findByIdAndUpdate(
+  const updatedData = await Interim.findByIdAndUpdate(
     { _id: id },
     payload,
     { new: true, runValidators: true },
   );
 
   if (!updatedData) {
-    throw new Error('Quote not found after update');
+    throw new Error('Interim not found after update');
   }
 
   return updatedData;
 };
 
-const deleteQuoteFromDB = async (id: string) => {
-  const deletedService = await Quote.findByIdAndDelete(
+const deleteInterimFromDB = async (id: string) => {
+  const deletedService = await Interim.findByIdAndDelete(
     id,
     // { isDeleted: true },
     { new: true },
   );
 
   if (!deletedService) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete Quote');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete Interim');
   }
 
   return deletedService;
 };
 
-export const QuoteServices = {
-  createQuoteIntoDB,
-  getAllQuotesFromDB,
-  getSingleQuoteFromDB,
-  updateQuoteIntoDB,
-  deleteQuoteFromDB,
-  shareQuoteIntoDB,
-  unShareQuoteIntoDB
+export const InterimServices = {
+  createInterimIntoDB,
+  getAllInterimsFromDB,
+  getSingleInterimFromDB,
+  updateInterimIntoDB,
+  deleteInterimFromDB,
+  unShareInterimIntoDB,
+  shareInterimIntoDB
 };
