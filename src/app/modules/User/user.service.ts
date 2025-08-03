@@ -41,7 +41,8 @@ const getSingleUserIntoDB = async (id: string) => {
 
 const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     const studentQuery = new QueryBuilder(
-    User.find({status: { $ne: 'blocked' }, isDeleted: false}),
+    User.find(),
+    // User.find({status: { $ne: 'blocked' }, isDeleted: false}),
     query,
   )
     .search(usersSearchableFields)
