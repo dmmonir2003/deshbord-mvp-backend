@@ -64,13 +64,11 @@ const unShareInterimIntoDB = async (
   userIds: string[],
 ) => {
 
-console.log('Unsharing Interim with IDs:', userIds)
-
   if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
     throw new Error('No user IDs provided for unsharing');
   }
   
- const updatedProject = await Interim.findByIdAndUpdate(
+ const updatedInterim = await Interim.findByIdAndUpdate(
     projectId,
     {
       $pull: {
@@ -82,11 +80,11 @@ console.log('Unsharing Interim with IDs:', userIds)
     { new: true }
   );
 
-  if (!updatedProject) {
-    throw new Error('Project not found or unshare failed');
+  if (!updatedInterim) {
+    throw new Error('Interim not found or unshare failed');
   }
 
-  return updatedProject;
+  return updatedInterim;
 };
 
 const getAllInterimsFromDB = async (query: Record<string, unknown>, user?: any) => {

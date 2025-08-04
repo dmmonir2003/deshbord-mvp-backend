@@ -61,25 +61,52 @@ const shareProjectIntoDB = async (
   return project;
 };
 const unShareProjectIntoDB = async (
-  projectId : string,
-  userId: string,
-) => {
- const updatedProject = await Project.findByIdAndUpdate(
-    projectId,
-    {
-      $pull: {
-        sharedWith: { userId: new Types.ObjectId(userId) }
-      }
-    },
-    { new: true }
-  );
-
-  if (!updatedProject) {
-    throw new Error('Project not found or unshare failed');
-  }
-
-  return updatedProject;
+ projectId : string,
+   userIds: string[],
+ ) => {
+ 
+   if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+     throw new Error('No user IDs provided for unsharing');
+   }
+   
+  const updatedProject = await Project.findByIdAndUpdate(
+     projectId,
+     {
+       $pull: {
+         sharedWith: {
+           userId: { $in: userIds.map(id => new Types.ObjectId(id)) } // 🔄 remove multiple
+         }
+       }
+     },
+     { new: true }
+   );
+ 
+   if (!updatedProject) {
+     throw new Error('Project not found or unshare failed');
+   }
+ 
+   return updatedProject;
 };
+// const unShareProjectIntoDB = async (
+//   projectId : string,
+//   userId: string,
+// ) => {
+//  const updatedProject = await Project.findByIdAndUpdate(
+//     projectId,
+//     {
+//       $pull: {
+//         sharedWith: { userId: new Types.ObjectId(userId) }
+//       }
+//     },
+//     { new: true }
+//   );
+
+//   if (!updatedProject) {
+//     throw new Error('Project not found or unshare failed');
+//   }
+
+//   return updatedProject;
+// };
 
 
 const getAllProjectsFromDB = async (query: Record<string, unknown>, user?: any) => {

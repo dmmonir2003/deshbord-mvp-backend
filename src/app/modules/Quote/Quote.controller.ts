@@ -29,8 +29,8 @@ const shareQuote = catchAsync(async (req, res) => {
 });
 const unShareQuote = catchAsync(async (req, res) => {
       const { id } = req.params;
-  const {userId } = req.body;
-  const result = await QuoteServices.unShareQuoteIntoDB(id, userId);
+  const {unShareWith } = req.body;
+  const result = await QuoteServices.unShareQuoteIntoDB(id, unShareWith);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

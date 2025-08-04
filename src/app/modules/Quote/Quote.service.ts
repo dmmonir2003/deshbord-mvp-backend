@@ -61,13 +61,20 @@ const shareQuoteIntoDB = async (
 };
 const unShareQuoteIntoDB = async (
   projectId : string,
-  userId: string,
+  userIds: string[],
 ) => {
+
+ if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+    throw new Error('No user IDs provided for unsharing');
+  }
+
  const updatedProject = await Quote.findByIdAndUpdate(
     projectId,
     {
       $pull: {
-        sharedWith: { userId: new Types.ObjectId(userId) }
+        sharedWith: {
+          userId: { $in: userIds.map(id => new Types.ObjectId(id)) } // 🔄 remove multiple
+        }
       }
     },
     { new: true }
@@ -78,9 +85,23 @@ const unShareQuoteIntoDB = async (
   }
 
   return updatedProject;
+
+//  const updatedProject = await Quote.findByIdAndUpdate(
+//     projectId,
+//     {
+//       $pull: {
+//         sharedWith: { userId: new Types.ObjectId(userId) }
+//       }
+//     },
+//     { new: true }
+//   );
+
+//   if (!updatedProject) {
+//     throw new Error('Project not found or unshare failed');
+//   }
+
+//   return updatedProject;
 };
-
-
 
 const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) => {
  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
