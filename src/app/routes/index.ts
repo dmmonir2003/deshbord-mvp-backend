@@ -10,6 +10,11 @@ import { NotificationRoutes } from '../modules/Notification/Notification.route';
 import { ProjectRoutes } from '../modules/Project/Project.route';
 import { AnalyticRoutes } from '../modules/Analytic/Analytic.route';
 import { QuoteRoutes } from '../modules/Quote/Quote.route';
+import { InterimRoutes } from '../modules/Interim/Interim.route';
+import { LabourRoutes } from '../modules/Labour/Labour.route';
+import { LabourExpenseRoutes } from '../modules/LabourExpense/LabourExpense.route';
+import { MaterialExpenseRoutes } from '../modules/MaterialExpense/MaterialExpense.route';
+import { SubContractorRoutes } from '../modules/SubContractor/SubContractor.route';
 
 const router = Router();
 
@@ -57,6 +62,26 @@ const moduleRoutes = [
   {
     path: '/quotes',
     route: QuoteRoutes, // Assuming you have a QuoteRoutes defined
+  },
+  {
+    path: '/interims',
+    route: InterimRoutes,
+  },
+  {
+    path: '/labours',
+    route: LabourRoutes, 
+  },
+  {
+    path: '/labour-expenses',
+    route: LabourExpenseRoutes, 
+  },
+  {
+    path: '/material-expenses',
+    route: MaterialExpenseRoutes, 
+  },
+  {
+    path: '/sub-contractor-expenses',
+    route: SubContractorRoutes, 
   },
 
 ];

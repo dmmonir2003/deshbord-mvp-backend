@@ -26,6 +26,19 @@ router.post(
   QuoteControllers.createQuote,
 );
 
+
+router.post(
+  '/:id/share',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  QuoteControllers.shareQuote
+);
+router.post(
+  '/:id/unshare',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  QuoteControllers.unShareQuote
+);
+
+
 router.get(
   '/:id',
   QuoteControllers.getSingleQuote,
@@ -33,6 +46,7 @@ router.get(
 
 router.patch(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
    uploadFileS3(true).single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
@@ -50,11 +64,13 @@ router.patch(
 
 router.delete(
   '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   QuoteControllers.deleteQuote,
 );
 
 router.get(
   '/',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
   QuoteControllers.getAllQuotes,
 );
 

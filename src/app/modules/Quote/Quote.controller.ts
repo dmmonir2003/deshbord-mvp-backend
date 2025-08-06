@@ -15,6 +15,32 @@ const createQuote = catchAsync(async (req, res) => {
   });
 });
 
+const shareQuote = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {sharedWith} = req.body;
+  const result = await QuoteServices.shareQuoteIntoDB(id, sharedWith, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+const unShareQuote = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {unShareWith } = req.body;
+  const result = await QuoteServices.unShareQuoteIntoDB(id, unShareWith);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+
+
 const getSingleQuote = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await QuoteServices.getSingleQuoteFromDB(id);
@@ -28,7 +54,7 @@ const getSingleQuote = catchAsync(async (req, res) => {
 });
 
 const getAllQuotes = catchAsync(async (req, res) => {
-  const result = await QuoteServices.getAllQuotesFromDB(req.query);
+  const result = await QuoteServices.getAllQuotesFromDB(req.query, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -70,4 +96,6 @@ export const QuoteControllers = {
   getAllQuotes,
   updateQuote,
   deleteQuote,
+  shareQuote,
+  unShareQuote
 };

@@ -29,8 +29,8 @@ const shareProject = catchAsync(async (req, res) => {
 });
 const unShareProject = catchAsync(async (req, res) => {
       const { id } = req.params;
-  const {userId } = req.body;
-  const result = await ProjectServices.unShareProjectIntoDB(id, userId);
+  const {unShareWith } = req.body;
+  const result = await ProjectServices.unShareProjectIntoDB(id, unShareWith);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

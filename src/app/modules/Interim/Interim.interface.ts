@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { Model , Types} from 'mongoose';
+import { Model, Types} from 'mongoose';
 
-export type TQuote = {
+export type TInterim = {
   title: string;
   projectId: Types.ObjectId;
-  file: string;
+  file?: string;
   value: number;
-  sharedWith?: {
+    sharedWith?: {
     userId: Types.ObjectId;
     role: 'client' | 'basicAdmin';
     sharedBy: Types.ObjectId;
@@ -14,6 +14,6 @@ export type TQuote = {
   isDeleted: boolean;
 };
 
-export interface QuoteModel extends Model<TQuote> {
-  isQuoteExists(id: string): Promise<TQuote | null>;
+export interface InterimModel extends Model<TInterim> {
+  isInterimExists(id: string): Promise<TInterim | null>;
 }
