@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { TInterim, InterimModel } from './Interim.interface';
+import { InterimStatus } from './Interim.constant';
 
 const InterimSchema = new Schema<TInterim, InterimModel>({
   title: { type: String, required: true },
@@ -9,6 +10,11 @@ const InterimSchema = new Schema<TInterim, InterimModel>({
     ref: 'Project',
   },
   value: { type: Number, required: true },
+  status: {
+    type: String,
+    enum: Object.values(InterimStatus),
+    default: 'pending',
+  },
   sharedWith: [
     {
       userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },

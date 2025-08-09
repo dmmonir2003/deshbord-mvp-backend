@@ -14,7 +14,7 @@ import { InterimRoutes } from '../modules/Interim/Interim.route';
 import { LabourRoutes } from '../modules/Labour/Labour.route';
 import { LabourExpenseRoutes } from '../modules/LabourExpense/LabourExpense.route';
 import { MaterialExpenseRoutes } from '../modules/MaterialExpense/MaterialExpense.route';
-import { SubContractorRoutes } from '../modules/SubContractor/SubContractor.route';
+import { SubContractorRoutes } from '../modules/SubContractorExpense/SubContractor.route';
 
 const router = Router();
 

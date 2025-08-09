@@ -13,6 +13,7 @@ export const updateInterimValidationSchema = z.object({
     title: z.string().min(1).optional(),
     projectId: z.string().optional(),
     file: z.string().optional(),
+    status: z.string().optional(),
     value: z.number().min(1).optional(),
   }),
 });
