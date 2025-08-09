@@ -16,10 +16,11 @@ const generateAndSendOTP = async (email: any ) => {
 
     // Save OTP to database
     await Otp.create({email, otp });
+    console.log(`Sending OTP ${otp} to user email ${email}`);
 
     // Simulate sending OTP (e.g., SMS or email)
     await SendEmail.sendOTPEmail(email, otp);
-    console.log(`Sending OTP ${otp} to user email ${email}`);
+    console.log(`2..Sending OTP ${otp} to user email ${email}`);
 
     return otp;
 

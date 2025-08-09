@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Model, Types} from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 export type TInterim = {
   title: string;
   projectId: Types.ObjectId;
   file?: string;
+  status?: 'pending' | 'paid';
   value: number;
-    sharedWith?: {
+  sharedWith?: {
     userId: Types.ObjectId;
     role: 'client' | 'basicAdmin';
     sharedBy: Types.ObjectId;
