@@ -25,7 +25,11 @@ router.post(
   validateRequest(createMaterialExpenseValidationSchema),
   MaterialExpenseControllers.createMaterialExpense,
 );
-
+router.get(
+  '/all-material-costs',
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  MaterialExpenseControllers.getAllMaterialCosts,
+);
 router.get(
   '/:id',
     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
@@ -61,5 +65,6 @@ router.get(
     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   MaterialExpenseControllers.getAllMaterialExpenses,
 );
+
 
 export const MaterialExpenseRoutes = router;

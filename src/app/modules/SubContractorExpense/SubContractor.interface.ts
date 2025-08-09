@@ -2,7 +2,7 @@
 import { Model, Types } from 'mongoose';
 
 export type TSubContractor = {
-  type?: string;
+    type?: string;
     name: string;
     days: number;
     vat?: number;

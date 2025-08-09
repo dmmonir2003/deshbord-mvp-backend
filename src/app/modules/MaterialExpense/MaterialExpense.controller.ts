@@ -38,6 +38,16 @@ const getAllMaterialExpenses = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+const getAllMaterialCosts = catchAsync(async (req, res) => {
+  const result = await MaterialExpenseServices.getAllMaterialCostsFromDB(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'MaterialExpenses are retrieved successfully',
+    data: result
+  });
+});
 
 const updateMaterialExpense = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -70,4 +80,5 @@ export const MaterialExpenseControllers = {
   getAllMaterialExpenses,
   updateMaterialExpense,
   deleteMaterialExpense,
+  getAllMaterialCosts
 };
