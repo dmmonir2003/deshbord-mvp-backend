@@ -34,6 +34,18 @@ payload.amount = payload.days * labour?.dayRate;
   return result;
 };
 
+const getAllLabourCostsFromDB = async (query: Record<string, unknown>) => {
+
+    const totalData = await LabourExpense.aggregate([
+      { $match: query }, // filter same as main query
+      { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+    ]);
+  
+  
+    return {
+      totalAmount: totalData[0]?.totalAmount || 0,
+    };
+};
 const getAllLabourExpensesFromDB = async (query: Record<string, unknown>) => {
   const LabourExpenseQuery = new QueryBuilder(
     LabourExpense.find(),
@@ -113,4 +125,5 @@ export const LabourExpenseServices = {
   getSingleLabourExpenseFromDB,
   updateLabourExpenseIntoDB,
   deleteLabourExpenseFromDB,
+  getAllLabourCostsFromDB
 };

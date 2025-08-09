@@ -25,6 +25,11 @@ router.post(
   validateRequest(createLabourExpenseValidationSchema),
   LabourExpenseControllers.createLabourExpense,
 );
+router.get(
+  '/all-labour-costs',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  LabourExpenseControllers.getAllLabourCosts,
+);
 
 router.get(
   '/:id',
@@ -61,5 +66,6 @@ router.get(
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   LabourExpenseControllers.getAllLabourExpenses,
 );
+
 
 export const LabourExpenseRoutes = router;

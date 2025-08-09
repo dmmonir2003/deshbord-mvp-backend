@@ -27,6 +27,12 @@ router.post(
 );
 
 router.get(
+  '/all-sub-contractor-costs',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  SubContractorControllers.getAllSubContractorCosts,
+);
+
+router.get(
   '/:id',
      auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   SubContractorControllers.getSingleSubContractor,
@@ -61,5 +67,6 @@ router.get(
      auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   SubContractorControllers.getAllSubContractors,
 );
+
 
 export const SubContractorRoutes = router;

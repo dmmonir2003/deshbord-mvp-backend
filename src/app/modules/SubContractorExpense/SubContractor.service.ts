@@ -49,6 +49,80 @@ const getAllSubContractorsFromDB = async (query: Record<string, unknown>) => {
     meta,
   };
 };
+// const getAllSubContractorCostsFromDB = async (query: Record<string, unknown>) => {
+//   const SubContractorQuery = new QueryBuilder(
+//     SubContractor.find(),
+//     query,
+//   )
+//     .search(SUBCONTRACTOR_SEARCHABLE_FIELDS)
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const result = await SubContractorQuery.modelQuery;
+//   const meta = await SubContractorQuery.countTotal();
+
+
+//   console.log(result, 'result');
+
+//   return {
+//     result,
+//     meta,
+//   };
+// };
+const getAllSubContractorCostsFromDB = async (query: Record<string, unknown>) => {
+  // const SubContractorQuery = new QueryBuilder(
+  //   SubContractor.find(),
+  //   query,
+  // )
+  //   .search(SUBCONTRACTOR_SEARCHABLE_FIELDS)
+  //   .filter()
+  //   .sort()
+  //   .paginate()
+  //   .fields();
+
+  // const result = await SubContractorQuery.modelQuery;
+  // const meta = await SubContractorQuery.countTotal();
+
+  // Aggregation to get total amount from ALL matching documents
+  const totalData = await SubContractor.aggregate([
+    { $match: query }, // filter same as main query
+    { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+  ]);
+
+
+  return {
+    // result,
+    // meta,
+    totalAmount: totalData[0]?.totalAmount || 0,
+  };
+};
+// const getAllSubContractorCostsFromDB = async (query: Record<string, unknown>) => {
+//   const SubContractorQuery = new QueryBuilder(
+//     SubContractor.find(),
+//     query,
+//   )
+//     .search(SUBCONTRACTOR_SEARCHABLE_FIELDS)
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const result = await SubContractorQuery.modelQuery;
+//   const meta = await SubContractorQuery.countTotal();
+
+//   // Calculate total amount from all results
+//   const totalAmount = result.reduce((sum, item) => sum + (item.amount || 0), 0);
+
+// console.log(totalAmount, 'totalAmount');
+
+//   return {
+//     result,
+//     meta,
+//     totalAmount, // <-- total cost here
+//   };
+// };
 
 const getSingleSubContractorFromDB = async (id: string) => {
   const result = await SubContractor.findById(id);
@@ -109,4 +183,5 @@ export const SubContractorServices = {
   getSingleSubContractorFromDB,
   updateSubContractorIntoDB,
   deleteSubContractorFromDB,
+  getAllSubContractorCostsFromDB
 };

@@ -27,6 +27,16 @@ const getSingleLabourExpense = catchAsync(async (req, res) => {
   });
 });
 
+const getAllLabourCosts = catchAsync(async (req, res) => {
+  const result = await LabourExpenseServices.getAllLabourCostsFromDB(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'LabourExpenses are retrieved successfully',
+    data: result
+  });
+});
 const getAllLabourExpenses = catchAsync(async (req, res) => {
   const result = await LabourExpenseServices.getAllLabourExpensesFromDB(req.query);
 
@@ -70,4 +80,5 @@ export const LabourExpenseControllers = {
   getAllLabourExpenses,
   updateLabourExpense,
   deleteLabourExpense,
+  getAllLabourCosts
 };

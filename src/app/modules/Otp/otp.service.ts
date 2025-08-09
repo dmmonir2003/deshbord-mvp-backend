@@ -80,7 +80,6 @@ const verifyOTP = async (user: any, payload : any) => {
 
 const otpVeryfyForgetPasswordIntoDB = async ( payload : any) => {
     const { email, otp } = payload;
-    console.log(email, otp, "muswaaaaaa")
     const user = await User.findOne({ email });
 
     const record = await Otp.findOne({ email, otp });

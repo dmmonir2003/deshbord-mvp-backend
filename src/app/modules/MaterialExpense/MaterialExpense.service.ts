@@ -53,6 +53,18 @@ const getAllMaterialExpensesFromDB = async (query: Record<string, unknown>) => {
     meta,
   };
 };
+const getAllMaterialCostsFromDB = async (query: Record<string, unknown>) => {
+
+    const totalData = await MaterialExpense.aggregate([
+      { $match: query }, // filter same as main query
+      { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+    ]);
+  
+  
+    return {
+      totalAmount: totalData[0]?.totalAmount || 0,
+    };
+};
 
 const getSingleMaterialExpenseFromDB = async (id: string) => {
   const result = await MaterialExpense.findById(id);
@@ -114,4 +126,5 @@ export const MaterialExpenseServices = {
   getSingleMaterialExpenseFromDB,
   updateMaterialExpenseIntoDB,
   deleteMaterialExpenseFromDB,
+  getAllMaterialCostsFromDB
 };

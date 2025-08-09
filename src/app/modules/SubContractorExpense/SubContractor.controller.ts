@@ -38,6 +38,18 @@ const getAllSubContractors = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+const getAllSubContractorCosts = catchAsync(async (req, res) => {
+  const result = await SubContractorServices.getAllSubContractorCostsFromDB(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'SubContractors are retrieved successfully',
+    // meta: result.meta,
+    // data: result.result,
+    data: result,
+  });
+});
 
 const updateSubContractor = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -70,4 +82,5 @@ export const SubContractorControllers = {
   getAllSubContractors,
   updateSubContractor,
   deleteSubContractor,
+  getAllSubContractorCosts
 };
