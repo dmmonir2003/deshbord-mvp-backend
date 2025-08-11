@@ -173,8 +173,6 @@ const getSingleProjectFromDB = async (id: string) => {
 
 const updateProjectIntoDB = async (id: string, payload: any) => {
 
-console.log(id,'Update payload:', payload);
-
   const isDeletedService = await mongoose.connection
     .collection('projects')
     .findOne(

@@ -3,13 +3,18 @@ import { TNote, NoteModel } from './Note.interface';
 
 const NoteSchema = new Schema<TNote, NoteModel>({
   projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
-  clientId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  clientId: { type: Schema.Types.ObjectId, ref: 'User' },
   note: { type: String, required: true },
   description: { type: String },
   date: { type: String, default: new Date().toISOString() }, // store date as string (could also use Date type if needed)
   value: { type: Number, required: true },
-  clientComment: { type: String, required: true },
-  adminComment: { type: String, required: true },
+  clientComment: { type: String},
+  adminComment: { type: String},
+      status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending'
+    },
   sharedWith: [
     {
       userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },

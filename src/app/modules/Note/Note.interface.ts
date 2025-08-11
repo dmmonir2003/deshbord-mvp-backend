@@ -10,6 +10,7 @@ export type TNote = {
   value: number;
   clientComment: string;
   adminComment: string; 
+  status: 'pending' | 'approved' | 'rejected';
   sharedWith?: {
     userId: Types.ObjectId;
     role: 'client' | 'basicAdmin';
