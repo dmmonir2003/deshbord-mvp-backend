@@ -8,11 +8,17 @@ import { TNote } from './Note.interface';
 import { Note } from './Note.model';
 import  { Types } from 'mongoose';
 import { User } from '../User/user.model';
+import { Quote } from '../Quote/Quote.model';
 // import { Project } from '../Project/Project.model';
 
 const createNoteIntoDB = async (
   payload: TNote,
+  file?: any
 ) => {
+
+  if(file) {
+    payload.file = file.location;
+  }
   //   const project = await Project.findById(payload.projectId);
   // console.log('project', project);
 
@@ -30,8 +36,8 @@ const shareNoteIntoDB = async (
   sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
   user?: any
 ) => {
-  const { userEmail } = user;
 
+  const { userEmail } = user;
   const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
     (user: any) => user?._id
   );
@@ -164,6 +170,7 @@ const getAllNotesFromDB = async (query: Record<string, unknown>, user?: any) => 
 
 //   return result;
 // };
+
 const getSingleNoteFromDB = async (id: string) => {
   const result = await Note.findById(id)
     .populate({
@@ -186,9 +193,115 @@ const getSingleNoteFromDB = async (id: string) => {
   return result;
 };
 
+const updateNoteIntoDB = async (id: string, payload: any, user: any) => {
 
-const updateNoteIntoDB = async (id: string, payload: any) => {
-  const isDeletedService = await mongoose.connection
+if(payload.status){
+
+  const note = await mongoose.connection
+    .collection('notes')
+    .findOne(
+      { _id: new mongoose.Types.ObjectId(id) },
+
+    );
+
+  if (!note) {
+    throw new Error('Note not found');
+  }
+
+  if (note.isDeleted) {
+    throw new Error('Cannot update a deleted Note');
+  }
+
+  const updatedNote = await Note.findByIdAndUpdate(
+    { _id: id },
+    payload,
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedNote) {
+    throw new Error('Note not found after update');
+  }
+
+   console.log('payload.status',updatedNote.status);
+
+   if( updatedNote.status === 'approved' ) {
+       console.log('updatedData.projectId======', updatedNote.projectId);
+       console.log('user.email======', user.userEmail);
+      // get last quote from db
+  const projectId = updatedNote.projectId;
+  const userId = await User.isUserExistsByCustomEmail(user.userEmail)
+  .then(
+    (user: any) => {
+      console.log('user',user);
+      return user?._id
+    } 
+  )
+  console.log('usr',userId);
+
+  // const userId = updatedData.userId; 
+  const lastQuote = await Quote.findOne({
+    projectId,                 // filter by project
+    // isDeleted: false,          // not deleted
+    "sharedWith.userId": userId // user has access
+  })
+    .sort({ createdAt: -1 }) // latest first
+    // .populate({
+    //   path: "sharedWith.userId",
+    //   select: "name image"
+    // })
+    // .populate({
+    //   path: "sharedWith.sharedBy",
+    //   select: "name image"
+    // });
+
+    console.log('lastQuote++++++++++',lastQuote);
+    console.log('updatedNote++++++++++',updatedNote);
+    console.log('updatedNote.value',updatedNote.value);
+    console.log('lastQuote?.value++++++++++',lastQuote?.value);
+    console.log('updatedNote?._id+++++++++',updatedNote?._id);
+  const newValue = updatedNote.value+(lastQuote?.value as any);
+    const newQuoteData =  {
+      projectId: lastQuote?.projectId,
+      title: lastQuote?.title,
+      file: lastQuote?.file,
+      noteId: updatedNote?._id,
+      value: newValue,
+      sharedWith: lastQuote?.sharedWith
+    }
+    const newQuote = await Quote.create(newQuoteData);
+    if (!newQuote) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Quote');
+    }
+// result++++++++++ {
+//   _id: new ObjectId('68996f4de71cc31474d92095'),
+//   title: 'Architect',
+//   file: 'https://pro-bucket.s3.us-east-1.amazonaws.com/1754885962356_1.png',
+//   projectId: new ObjectId('688e16d11287a3a4dc3a9b83'),
+//   value: 450000,
+//   isDeleted: false,
+//   sharedWith: [
+//     {
+//       userId: new ObjectId('68996262d2544a0c0ed42616'),
+//       role: 'client',
+//       sharedBy: new ObjectId('688e22868f082a1b763c2007'),
+//       _id: new ObjectId('68996fcde71cc31474d920b4')
+//     }
+//   ],
+//   __v: 0
+// }
+
+      return;
+      // return newQuote;
+   }
+
+ 
+
+
+}else{
+
+ console.log('payload.status Not found');
+
+const isDeletedService = await mongoose.connection
     .collection('notes')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) },
@@ -214,6 +327,9 @@ const updateNoteIntoDB = async (id: string, payload: any) => {
   }
 
   return updatedData;
+}
+
+  
 };
 
 const deleteNoteFromDB = async (id: string) => {

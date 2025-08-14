@@ -41,6 +41,7 @@ router.post(
 
 router.get(
   '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
   QuoteControllers.getSingleQuote,
 );
 

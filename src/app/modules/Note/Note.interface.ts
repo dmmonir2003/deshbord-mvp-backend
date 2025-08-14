@@ -4,7 +4,8 @@ import { Model , Types} from 'mongoose';
 export type TNote = {
   projectId: Types.ObjectId;
   clientId: Types.ObjectId;
-  note: string;
+  title: string;
+  file: string;
   description?: string;
   date: string;
   value: number;

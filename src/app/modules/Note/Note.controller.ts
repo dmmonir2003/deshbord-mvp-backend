@@ -5,7 +5,7 @@ import { NoteServices } from './Note.service';
 
 const createNote = catchAsync(async (req, res) => {
   const NoteData = req.body;
-  const result = await NoteServices.createNoteIntoDB(NoteData);
+  const result = await NoteServices.createNoteIntoDB(NoteData, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -68,7 +68,7 @@ const getAllNotes = catchAsync(async (req, res) => {
 const updateNote = catchAsync(async (req, res) => {
   const { id } = req.params;
   const Note = req.body;
-  const result = await NoteServices.updateNoteIntoDB(id, Note);
+  const result = await NoteServices.updateNoteIntoDB(id, Note, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

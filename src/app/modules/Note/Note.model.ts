@@ -4,7 +4,8 @@ import { TNote, NoteModel } from './Note.interface';
 const NoteSchema = new Schema<TNote, NoteModel>({
   projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
   clientId: { type: Schema.Types.ObjectId, ref: 'User' },
-  note: { type: String, required: true },
+  title: { type: String, required: true },
+  file: { type: String },
   description: { type: String },
   date: { type: String, default: new Date().toISOString() }, // store date as string (could also use Date type if needed)
   value: { type: Number, required: true },
