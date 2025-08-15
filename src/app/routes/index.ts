@@ -16,6 +16,7 @@ import { LabourExpenseRoutes } from '../modules/LabourExpense/LabourExpense.rout
 import { MaterialExpenseRoutes } from '../modules/MaterialExpense/MaterialExpense.route';
 import { SubContractorRoutes } from '../modules/SubContractorExpense/SubContractor.route';
 import { LiveProjectCostRoutes } from '../modules/LiveProjectCost/LiveProjectCost.route';
+import { NoteRoutes } from '../modules/Note/Note.route';
 
 const router = Router();
 
@@ -87,6 +88,10 @@ const moduleRoutes = [
   {
     path: '/live-project-costs',
     route: LiveProjectCostRoutes, 
+  },
+  {
+    path: '/notes',
+    route: NoteRoutes, 
   },
 
 ];

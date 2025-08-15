@@ -4,8 +4,8 @@ import sendResponse from '../../utils/sendResponse';
 import { NoteServices } from './Note.service';
 
 const createNote = catchAsync(async (req, res) => {
-  const { Note: NoteData } = req.body;
-  const result = await NoteServices.createNoteIntoDB(NoteData);
+  const NoteData = req.body;
+  const result = await NoteServices.createNoteIntoDB(NoteData, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -14,6 +14,32 @@ const createNote = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const shareNote = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {sharedWith} = req.body;
+  const result = await NoteServices.shareNoteIntoDB(id, sharedWith, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+const unShareNote = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {unShareWith } = req.body;
+  const result = await NoteServices.unShareNoteIntoDB(id, unShareWith);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+
 
 const getSingleNote = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -28,7 +54,7 @@ const getSingleNote = catchAsync(async (req, res) => {
 });
 
 const getAllNotes = catchAsync(async (req, res) => {
-  const result = await NoteServices.getAllNotesFromDB(req.query);
+  const result = await NoteServices.getAllNotesFromDB(req.query, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -41,8 +67,8 @@ const getAllNotes = catchAsync(async (req, res) => {
 
 const updateNote = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { Note } = req.body;
-  const result = await NoteServices.updateNoteIntoDB(id, Note);
+  const Note = req.body;
+  const result = await NoteServices.updateNoteIntoDB(id, Note, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -70,4 +96,6 @@ export const NoteControllers = {
   getAllNotes,
   updateNote,
   deleteNote,
+  shareNote,
+  unShareNote
 };

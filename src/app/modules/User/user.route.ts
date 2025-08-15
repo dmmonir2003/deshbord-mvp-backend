@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   '/create-user',
   auth(USER_ROLE.superAdmin),
-    uploadFileS3(true).single('file'),
+  uploadFileS3(true).single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
       try {

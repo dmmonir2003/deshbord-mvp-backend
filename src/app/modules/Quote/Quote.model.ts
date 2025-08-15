@@ -8,6 +8,10 @@ const QuoteSchema = new Schema<TQuote, QuoteModel>({
     type: Schema.Types.ObjectId,
     ref: 'Project',
   },
+  noteId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Note',
+  },
   value: { type: Number, required: true },
   sharedWith: [
     {
@@ -17,7 +21,7 @@ const QuoteSchema = new Schema<TQuote, QuoteModel>({
     },
   ],
   isDeleted: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 QuoteSchema.statics.isQuoteExists = async function (id: string) {
   return await this.findOne({ _id: id, isDeleted: false });

@@ -4,6 +4,7 @@ import { Model , Types} from 'mongoose';
 export type TQuote = {
   title: string;
   projectId: Types.ObjectId;
+  noteId?: Types.ObjectId;
   file: string;
   value: number;
   sharedWith?: {

@@ -13,6 +13,7 @@ export const updateQuoteValidationSchema = z.object({
       title: z.string().min(1).optional(),
       projectId: z.string().optional(),
       file: z.string().optional(),
+      noteId: z.string().optional(),
       value: z.number().min(1).optional(),
   }),
 });
