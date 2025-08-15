@@ -17,6 +17,7 @@ import { MaterialExpenseRoutes } from '../modules/MaterialExpense/MaterialExpens
 import { SubContractorRoutes } from '../modules/SubContractorExpense/SubContractor.route';
 import { LiveProjectCostRoutes } from '../modules/LiveProjectCost/LiveProjectCost.route';
 import { NoteRoutes } from '../modules/Note/Note.route';
+import { PaymentTrackerRoutes } from '../modules/PaymentTracker/PaymentTracker.route';
 
 const router = Router();
 
@@ -92,6 +93,10 @@ const moduleRoutes = [
   {
     path: '/notes',
     route: NoteRoutes, 
+  },
+  {
+    path: '/payment-trackers',
+    route: PaymentTrackerRoutes, 
   },
 
 ];

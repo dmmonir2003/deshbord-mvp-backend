@@ -54,6 +54,9 @@ const getSingleNote = catchAsync(async (req, res) => {
 });
 
 const getAllNotes = catchAsync(async (req, res) => {
+
+  console.log('req.query', req.user);
+
   const result = await NoteServices.getAllNotesFromDB(req.query, req.user);
 
   sendResponse(res, {

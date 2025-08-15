@@ -88,6 +88,10 @@ const unShareInterimIntoDB = async (
 };
 
 const getAllInterimsFromDB = async (query: Record<string, unknown>, user?: any) => {
+
+  console.log('user', user);           
+  console.log('query', query);           
+
  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
   const { userEmail } = user;
   const userId = await User.isUserExistsByCustomEmail(userEmail).then(

@@ -27,6 +27,12 @@ router.post(
 );
 
 
+router.get(
+  '/:id/last-quote',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  QuoteControllers.lastQuote
+);
+
 router.post(
   '/:id/share',
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
