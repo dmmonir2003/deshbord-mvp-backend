@@ -59,6 +59,55 @@ const shareQuoteIntoDB = async (
 
   return project;
 };
+const lastQuoteIntoDB = async (
+  projectId: string,
+  // sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
+  // user?: any
+) => {
+  // const { userEmail } = user;
+
+  // const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
+  //   (user: any) => user?._id
+  // );
+
+  // if (!sharedBy) {
+  //   throw new Error('Shared by user not found');
+  // }
+
+  // const sharedEntries = sharedWith.map(entry => ({
+  //   userId: new Types.ObjectId(entry.userId),
+  //   role: entry.role,
+  //   sharedBy: new Types.ObjectId(sharedBy),
+  // }));
+
+  // const project = await Quote.findByIdAndUpdate(
+  //   quoteId,
+  //   { $addToSet: { sharedWith: { $each: sharedEntries } } },
+  //   { new: true }
+  // );
+
+  // if (!project) {
+  //   throw new Error('Project not found or update failed');
+  // }
+
+  // const project = await Quote.findByIdAndUpdate(
+  //   quoteId,
+  //   { $addToSet: { sharedWith: { $each: sharedEntries } } },
+  //   { new: true }
+  // );
+
+    const lastQuote = await Quote.findOne({
+      projectId,                 // filter by project
+      // isDeleted: false,          // not deleted
+      // "sharedWith.userId": userId // user has access
+    })
+      .sort({ createdAt: -1 }) 
+
+
+// console.log('lastQuote', lastQuote);
+
+  return lastQuote;
+};
 const unShareQuoteIntoDB = async (
   projectId : string,
   userIds: string[],
@@ -104,6 +153,9 @@ const unShareQuoteIntoDB = async (
 };
 
 const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) => {
+
+  // console.log('user',user);
+
  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
   const { userEmail } = user;
   const userId = await User.isUserExistsByCustomEmail(userEmail).then(
@@ -236,5 +288,7 @@ export const QuoteServices = {
   updateQuoteIntoDB,
   deleteQuoteFromDB,
   shareQuoteIntoDB,
-  unShareQuoteIntoDB
+  unShareQuoteIntoDB,
+  lastQuoteIntoDB
 };
+

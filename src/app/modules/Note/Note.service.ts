@@ -95,6 +95,8 @@ const unShareNoteIntoDB = async (
 
 const getAllNotesFromDB = async (query: Record<string, unknown>, user?: any) => {
 
+  console.log('user', user);
+
     if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
     const { userEmail } = user;
     const userId = await User.isUserExistsByCustomEmail(userEmail).then(
@@ -104,8 +106,8 @@ const getAllNotesFromDB = async (query: Record<string, unknown>, user?: any) => 
     if (!userId) {
       throw new AppError(httpStatus.NOT_FOUND, 'User not found');
     }  
-  
-       const NoteQuery = new QueryBuilder(
+    console.log('userId', userId);
+    const NoteQuery = new QueryBuilder(
       Note.find({
           sharedWith: {
             $elemMatch: {
