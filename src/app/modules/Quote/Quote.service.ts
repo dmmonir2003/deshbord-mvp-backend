@@ -228,7 +228,10 @@ const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) =>
 };
 
 const getSingleQuoteFromDB = async (id: string) => {
-  const result = await Quote.findById(id);
+  const result = await Quote.findById(id).populate({
+      path: "sharedWith.userId", // field to populate
+      select: "name profileImg role", // only return what you need
+    });;
 
   return result;
 };

@@ -177,11 +177,11 @@ const getSingleNoteFromDB = async (id: string) => {
   const result = await Note.findById(id)
     .populate({
       path: "sharedWith.userId",
-      select: "name profileImg" // only fetch name and image
+      select: "name profileImg role" // only fetch name and image
     })
     .populate({
       path: "sharedWith.sharedBy",
-      select: "name profileImg" // optional, if you also want the sharer's info
+      select: "name profileImg role" // optional, if you also want the sharer's info
     })
     // .populate({
     //   path: "projectId",
