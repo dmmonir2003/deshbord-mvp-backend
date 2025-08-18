@@ -13,7 +13,7 @@ export interface TUser {
   project?: Types.ObjectId;
   address?: string;
   postCode?: string;
-  role: 'client' | 'superAdmin' | 'basicAdmin' | 'basicAdmin';
+  role: 'client' | 'superAdmin' | 'basicAdmin' | 'primeAdmin';
   status?: 'active' | 'blocked';
   isDeleted: boolean;
 }
