@@ -5,6 +5,10 @@ const LabourExpenseSchema = new Schema<TLabourExpense, LabourExpenseModel>({
   type: { type: String },
   name: { type: String, required: true },
   days: { type: Number, required: true },
+  projectId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Project',
+  },
   vat: { type: Number, default: 0 },
   amount: { type: Number, required: true },
   file: { type: String },

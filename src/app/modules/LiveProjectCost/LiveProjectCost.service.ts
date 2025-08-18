@@ -41,14 +41,10 @@ const getAllLiveProjectCostsFromDB = async (query: Record<string, unknown>) => {
   };
 };
 const getAllTypeLiveProjectCostsFromDB = async (query: Record<string, unknown>) => {
-
+  // console.log('query',query);
   const labourCost = await LabourExpenseServices.getAllLabourCostsFromDB(query);
  const materialCost = await MaterialExpenseServices.getAllMaterialCostsFromDB(query);
  const subContractorCost = await SubContractorServices.getAllSubContractorCostsFromDB(query);
- 
- console.log(labourCost, 'labourCost');
- console.log(materialCost, 'materialCost');
- console.log(subContractorCost, 'subContractorCost');
 
  const totalProjectCost = labourCost.totalAmount + materialCost.totalAmount + subContractorCost.totalAmount;
 

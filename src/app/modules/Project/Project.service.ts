@@ -166,10 +166,15 @@ const getAllProjectsFromDB = async (query: Record<string, unknown>, user?: any) 
 };
 
 const getSingleProjectFromDB = async (id: string) => {
-  const result = await Project.findById(id);
+  const result = await Project.findById(id)
+    .populate({
+      path: "sharedWith.userId", // field to populate
+      select: "name profileImg email role", // only return what you need
+    });
 
   return result;
 };
+
 
 const updateProjectIntoDB = async (id: string, payload: any) => {
 

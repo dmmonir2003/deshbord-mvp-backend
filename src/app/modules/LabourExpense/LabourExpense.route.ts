@@ -27,6 +27,7 @@ router.post(
 );
 router.get(
   '/all-labour-costs',
+  // '/:id/all-labour-costs',
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   LabourExpenseControllers.getAllLabourCosts,
 );

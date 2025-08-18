@@ -12,6 +12,10 @@ const MaterialExpenseSchema = new Schema<
   name: { type: String, required: true },
   vat: { type: Number, default: 0 },
   quantity: { type: Number, default: 0 },
+  projectId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Project',
+  },
   unitPrice: { type: Number, default: 0 },
   unit: { type: String, default: 0 },
   amount: { type: Number, required: true },

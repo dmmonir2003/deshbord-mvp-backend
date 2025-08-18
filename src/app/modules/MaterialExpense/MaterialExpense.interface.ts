@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 export type TMaterialExpense = {
     type?: string;
     name: string;
+    projectId: Types.ObjectId;
     quantity?: number;
     unit?: number;
     unitPrice?: number;

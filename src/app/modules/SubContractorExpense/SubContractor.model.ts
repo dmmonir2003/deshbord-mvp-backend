@@ -6,6 +6,10 @@ const SubContractorSchema = new Schema<TSubContractor, SubContractorModel>(
     type: { type: String },
     name: { type: String, required: true },
     days: { type: Number, required: true },
+    projectId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Project',
+   },
     vat: { type: Number, default: 0 },
     amount: { type: Number, required: true },
     ratePerDay: { type: Number, required: true },
@@ -25,6 +29,6 @@ SubContractorSchema.statics.isSubContractorExists = async function (
 };
 
 export const SubContractor = model<TSubContractor, SubContractorModel>(
-  'SubContractor',
+  'SubContractorExpense',
   SubContractorSchema,
 );

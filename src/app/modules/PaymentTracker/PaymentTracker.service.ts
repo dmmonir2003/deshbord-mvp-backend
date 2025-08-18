@@ -6,9 +6,11 @@ import { PAYMENTTRACKER_SEARCHABLE_FIELDS } from './PaymentTracker.constant';
 import mongoose from 'mongoose';
 import { TPaymentTracker } from './PaymentTracker.interface';
 import { PaymentTracker } from './PaymentTracker.model';
-import { User } from '../User/user.model';
+// import { User } from '../User/user.model';
 import { QuoteServices } from '../Quote/Quote.service';
 import { InterimServices } from '../Interim/Interim.service';
+import { LiveProjectCostServices } from '../LiveProjectCost/LiveProjectCost.service';
+import { Project } from '../Project/Project.model';
 
 const createPaymentTrackerIntoDB = async (
   payload: TPaymentTracker,
@@ -41,43 +43,58 @@ const getAllPaymentTrackersFromDB = async (query: Record<string, unknown>) => {
   };
 };
 const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown>, user?: any) => {
-  
-        console.log('query',query);
-        console.log('user',user);
+     if(!query?.projectId) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'projectId is required');
+     }
+     
+     const project = await Project.findById(query?.projectId);
 
-        console.log('query?.projectId',query?.projectId);
+     if(!project) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Project not found');
+     }
+    
 
-  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
-    const { userEmail } = user;
-    const userId = await User.isUserExistsByCustomEmail(userEmail).then(
-      (user: any) => user?._id
-    );
-   
-    console.log('userId', userId);
 
+      const lastQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
+      const allInterims = await InterimServices.getAllInterimsFromDB(query, user);
+      const totalInterimValue = allInterims.result.map((interim:any) => interim.value).reduce((acc, interim) => acc + interim, 0);
+      const outStanding = lastQuote?.value ? lastQuote?.value - totalInterimValue : 0;
+      const allCost = await LiveProjectCostServices.getAllTypeLiveProjectCostsFromDB(query);
+      const totalCost = allCost.result.find((e:any) => e.name === 'Total');
+      const profit = totalCost?.amount ? totalInterimValue - totalCost?.amount : 0;
+
+
+  if( user?.role === 'client'   ) {
+    // const { userEmail } = user;
+    // const userId = await User.isUserExistsByCustomEmail(userEmail).then(
+    //   (user: any) => user?._id
+    // );
+
+    // if (!userId) {
+    //   throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    // }
+     const paymentTrackerdata = {
+           quote:lastQuote,
+           interims:allInterims.result,
+          outStanding
+       }
+
+       return paymentTrackerdata
  
-  }else{
-      //  const totalInterimValue = 0;
-       const lastQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
-       const allInterims = await InterimServices.getAllInterimsFromDB(query, user);
+  }
 
-
-        const totalInterimValue = allInterims.result.map((interim:any) => interim.value).reduce((acc, interim) => acc + interim, 0);
-        // const totalInterimValue = allInterims.reduce((acc, interim) => acc + interim.interimValue, 0);
-      //  console.log('lastQuote',lastQuote);
-       console.log('allInterims',allInterims.result);
-       console.log('totalInterimValue',totalInterimValue);
-
+  if(user?.role === 'superAdmin' || user?.role === 'primeAdmin') {
        const paymentTrackerdata = {
            quote:lastQuote,
            interims:allInterims.result,
-           outStanding: lastQuote?.value ? (lastQuote?.value - totalInterimValue) : 0,
-           profit: totalInterimValue
+          outStanding,
+           profit
        }
 
-       console.log('paymentTrackerdata',paymentTrackerdata);
        return paymentTrackerdata
-}
+  }
+  
+
 }
 const getSinglePaymentTrackerFromDB = async (id: string) => {
   const result = await PaymentTracker.findById(id);

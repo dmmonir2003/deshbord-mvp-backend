@@ -5,6 +5,7 @@ export const createSubContractorValidationSchema = z.object({
     type: z.string().optional(),
     name: z.string({ required_error: 'Name is required' }),
     days: z.number({ required_error: 'Days is required' }),
+    projectId: z.string({ required_error: 'projectId is required' }),
     vat: z.number().optional(),
     amount: z.number().optional(),
     file: z.string().optional(),
@@ -25,6 +26,7 @@ export const updateSubContractorValidationSchema = z.object({
     days: z.number({ required_error: 'Days is required' }).optional(),
         ratePerDay: z.number().optional(),
     vat: z.number().optional(),
+    projectId: z.string({ required_error: 'projectId is required' }).optional(),
     amount: z.number({ required_error: 'Amount is required' }).optional(),
     file: z.string().optional(),
     labourId: z

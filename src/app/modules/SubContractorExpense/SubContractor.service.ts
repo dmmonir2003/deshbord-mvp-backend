@@ -85,6 +85,11 @@ const getAllSubContractorCostsFromDB = async (query: Record<string, unknown>) =>
   // const result = await SubContractorQuery.modelQuery;
   // const meta = await SubContractorQuery.countTotal();
 
+  // Ensure projectId is ObjectId
+  if (query.projectId) {
+    query.projectId = new mongoose.Types.ObjectId(query.projectId as string);
+  }
+
   // Aggregation to get total amount from ALL matching documents
   const totalData = await SubContractor.aggregate([
     { $match: query }, // filter same as main query

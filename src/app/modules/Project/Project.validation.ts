@@ -12,7 +12,7 @@ export const createProjectValidationSchema = z.object({
   description: z.string().optional(),
   reference: z.string().optional(),
   address: z.string(),
-  contact: z.string(),
+  contact: z.string().optional(),
   type: z.string().optional(),
   startDate: z.string(),
   endDate: z.string(),

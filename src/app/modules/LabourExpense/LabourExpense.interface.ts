@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 export type TLabourExpense = {
   type?: string;
   name: string;
+  projectId: Types.ObjectId;
   days: number;
   vat?: number;
   amount: number;
