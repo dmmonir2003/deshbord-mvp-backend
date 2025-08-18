@@ -5,6 +5,7 @@ export type TSubContractor = {
     type?: string;
     name: string;
     days: number;
+    projectId: Types.ObjectId;
     vat?: number;
     ratePerDay: number;
     amount: number;

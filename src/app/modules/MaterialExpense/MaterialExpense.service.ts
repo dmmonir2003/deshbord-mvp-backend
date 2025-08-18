@@ -55,6 +55,11 @@ const getAllMaterialExpensesFromDB = async (query: Record<string, unknown>) => {
 };
 const getAllMaterialCostsFromDB = async (query: Record<string, unknown>) => {
 
+  // Ensure projectId is ObjectId
+  if (query.projectId) {
+    query.projectId = new mongoose.Types.ObjectId(query.projectId as string);
+  }
+
     const totalData = await MaterialExpense.aggregate([
       { $match: query }, // filter same as main query
       { $group: { _id: null, totalAmount: { $sum: "$amount" } } }

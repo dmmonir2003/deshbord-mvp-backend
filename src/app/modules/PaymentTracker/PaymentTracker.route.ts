@@ -15,7 +15,7 @@ router.post(
 
 router.get(
   '/all-element',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client),
   PaymentTrackerControllers.getAllPaymentTrackerElements,
 );
 

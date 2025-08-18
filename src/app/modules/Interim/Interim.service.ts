@@ -88,16 +88,11 @@ const unShareInterimIntoDB = async (
 };
 
 const getAllInterimsFromDB = async (query: Record<string, unknown>, user?: any) => {
-
-  console.log('user', user);           
-  console.log('query', query);           
-
  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
   const { userEmail } = user;
   const userId = await User.isUserExistsByCustomEmail(userEmail).then(
     (user: any) => user?._id
   );
-
   if (!userId) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
   }  
@@ -147,14 +142,15 @@ const getAllInterimsFromDB = async (query: Record<string, unknown>, user?: any) 
 };
 
 const getSingleInterimFromDB = async (id: string) => {
-  const result = await Interim.findById(id);
+  const result = await Interim.findById(id).populate({
+      path: "sharedWith.userId", // field to populate
+      select: "name profileImg role", // only return what you need
+    });;
 
   return result;
 };
 
 const updateInterimIntoDB = async (id: string, payload: any, file?: any) => {
-
-
 if( file ) {
     payload.file = file.location as string;
   }

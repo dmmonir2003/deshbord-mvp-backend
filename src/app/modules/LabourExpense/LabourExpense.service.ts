@@ -34,14 +34,19 @@ payload.amount = payload.days * labour?.dayRate;
   return result;
 };
 
-const getAllLabourCostsFromDB = async (query: Record<string, unknown>) => {
+const getAllLabourCostsFromDB = async ( query: Record<string, unknown>) => {
+
+  // Ensure projectId is ObjectId
+  if (query.projectId) {
+    query.projectId = new mongoose.Types.ObjectId(query.projectId as string);
+  }
 
     const totalData = await LabourExpense.aggregate([
       { $match: query }, // filter same as main query
       { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
     ]);
   
-  
+  console.log('totalData[0]?.totalAmount',totalData[0]?.totalAmount);
     return {
       totalAmount: totalData[0]?.totalAmount || 0,
     };

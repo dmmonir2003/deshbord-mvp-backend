@@ -28,7 +28,9 @@ const getSingleLabourExpense = catchAsync(async (req, res) => {
 });
 
 const getAllLabourCosts = catchAsync(async (req, res) => {
+    // const { id } = req.params;
   const result = await LabourExpenseServices.getAllLabourCostsFromDB(req.query);
+  // const result = await LabourExpenseServices.getAllLabourCostsFromDB(id, req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
