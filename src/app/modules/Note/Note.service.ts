@@ -174,7 +174,7 @@ const getAllNotesFromDB = async (query: Record<string, unknown>, user?: any) => 
 // };
 
 const getSingleNoteFromDB = async (id: string) => {
-  const result = await Note.findById(id)
+  const result = await Note.findById(id) 
     .populate({
       path: "sharedWith.userId",
       select: "name profileImg role" // only fetch name and image
