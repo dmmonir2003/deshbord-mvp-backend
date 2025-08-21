@@ -256,11 +256,11 @@ if(payload.status){
     //   select: "name image"
     // });
 
-    console.log('lastQuote++++++++++',lastQuote);
-    console.log('updatedNote++++++++++',updatedNote);
-    console.log('updatedNote.value',updatedNote.value);
-    console.log('lastQuote?.value++++++++++',lastQuote?.value);
-    console.log('updatedNote?._id+++++++++',updatedNote?._id);
+    // console.log('lastQuote++++++++++',lastQuote);
+    // console.log('updatedNote++++++++++',updatedNote);
+    // console.log('updatedNote.value',updatedNote.value);
+    // console.log('lastQuote?.value++++++++++',lastQuote?.value);
+    // console.log('updatedNote?._id+++++++++',updatedNote?._id);
   const newValue = updatedNote.value+(lastQuote?.value as any);
     const newQuoteData =  {
       projectId: lastQuote?.projectId,

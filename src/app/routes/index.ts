@@ -19,6 +19,7 @@ import { LiveProjectCostRoutes } from '../modules/LiveProjectCost/LiveProjectCos
 import { NoteRoutes } from '../modules/Note/Note.route';
 import { PaymentTrackerRoutes } from '../modules/PaymentTracker/PaymentTracker.route';
 import { CertificateRoutes } from '../modules/Certificate/Certificate.route';
+import { DocumentRoutes } from '../modules/Document/Document.route';
 
 const router = Router();
 
@@ -102,6 +103,10 @@ const moduleRoutes = [
   {
     path: '/certificates',
     route: CertificateRoutes, 
+  },
+  {
+    path: '/documents',
+    route: DocumentRoutes, 
   },
 
 ];
