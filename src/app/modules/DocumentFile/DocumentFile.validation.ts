@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const createDocumentFileValidationSchema = z.object({
   body: z.object({
       documentSubFolderId: z.string(),
+      title: z.string(),
       projectId: z.string(),
       isDeleted: z.boolean().default(false),
   }),
