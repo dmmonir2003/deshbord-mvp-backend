@@ -3,7 +3,6 @@ import { TDocumentFile, DocumentFileModel } from './DocumentFile.interface';
 
 const DocumentFileSchema = new Schema<TDocumentFile, DocumentFileModel>({
   file: { type: String, required: true },
-  title: { type: String },
   documentSubFolderId: {
     type: Schema.Types.ObjectId,
     ref: 'Document',
