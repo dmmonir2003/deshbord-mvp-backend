@@ -20,9 +20,10 @@ import { NoteRoutes } from '../modules/Note/Note.route';
 import { PaymentTrackerRoutes } from '../modules/PaymentTracker/PaymentTracker.route';
 import { CertificateRoutes } from '../modules/Certificate/Certificate.route';
 import { DocumentRoutes } from '../modules/Document/Document.route';
-// import { DocumentSubfolder } from '../modules/DocumentSubfolder/DocumentSubfolder.model';
 import { DocumentSubfolderRoutes } from '../modules/DocumentSubfolder/DocumentSubfolder.route';
 import { DocumentFileRoutes } from '../modules/DocumentFile/DocumentFile.route';
+import { SitePictureRoutes } from '../modules/SitePictureFolder/SitePicture.route';
+import { SitePictureImageRoutes } from '../modules/SitePictureImage/SitePictureImage.route';
 
 const router = Router();
 
@@ -118,6 +119,14 @@ const moduleRoutes = [
   {
     path: '/document-files',
     route: DocumentFileRoutes, 
+  },
+  {
+    path: '/site-pictures',
+    route: SitePictureRoutes,
+  },
+  {
+    path: '/site-picture-Images',
+    route: SitePictureImageRoutes,
   },
 
 ];
