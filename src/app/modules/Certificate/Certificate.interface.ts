@@ -3,6 +3,7 @@ import { Model, Types } from 'mongoose';
 
 export type TCertificate = {
   file: string;
+  title: string;
   projectId: Types.ObjectId;
   sharedWith?: {
     userId: Types.ObjectId;
