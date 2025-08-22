@@ -1,14 +1,14 @@
 import { Schema, model } from 'mongoose';
-import { TCertificate, CertificateModel } from './Certificate.interface';
+import { TSitePicture, SitePictureModel } from './SitePicture.interface';
 
-const CertificateSchema = new Schema<TCertificate, CertificateModel>({
-  file: { type: String, required: true },
-  title: { type: String, required: true , unique: true},
+const SitePictureSchema = new Schema<TSitePicture, SitePictureModel>({
+  title: { type: String, required: true, unique: true },
   projectId: {
     type: Schema.Types.ObjectId,
     ref: 'Project',
+    required: true,
   },
-    sharedWith: [
+  sharedWith: [
     {
       userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
       role: { type: String, enum: ['client', 'basicAdmin'], required: true },
@@ -18,11 +18,11 @@ const CertificateSchema = new Schema<TCertificate, CertificateModel>({
   isDeleted: { type: Boolean, default: false },
 });
 
-CertificateSchema.statics.isCertificateExists = async function (id: string) {
+SitePictureSchema.statics.isSitePictureExists = async function (id: string) {
   return await this.findOne({ _id: id, isDeleted: false });
 };
 
-export const Certificate = model<TCertificate, CertificateModel>(
-  'Certificate',
-  CertificateSchema,
+export const SitePictureFolder = model<TSitePicture, SitePictureModel>(
+  'SitePictureFolder',
+  SitePictureSchema,
 );
