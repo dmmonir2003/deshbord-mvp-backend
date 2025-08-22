@@ -20,6 +20,9 @@ import { NoteRoutes } from '../modules/Note/Note.route';
 import { PaymentTrackerRoutes } from '../modules/PaymentTracker/PaymentTracker.route';
 import { CertificateRoutes } from '../modules/Certificate/Certificate.route';
 import { DocumentRoutes } from '../modules/Document/Document.route';
+// import { DocumentSubfolder } from '../modules/DocumentSubfolder/DocumentSubfolder.model';
+import { DocumentSubfolderRoutes } from '../modules/DocumentSubfolder/DocumentSubfolder.route';
+import { DocumentFileRoutes } from '../modules/DocumentFile/DocumentFile.route';
 
 const router = Router();
 
@@ -107,6 +110,14 @@ const moduleRoutes = [
   {
     path: '/documents',
     route: DocumentRoutes, 
+  },
+  {
+    path: '/sub-documents',
+    route: DocumentSubfolderRoutes, 
+  },
+  {
+    path: '/document-files',
+    route: DocumentFileRoutes, 
   },
 
 ];

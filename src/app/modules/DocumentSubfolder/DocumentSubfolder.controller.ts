@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { DocumentSubfolderServices } from './DocumentSubfolder.service';
 
 const createDocumentSubfolder = catchAsync(async (req, res) => {
-  const { DocumentSubfolder: DocumentSubfolderData } = req.body;
+  const DocumentSubfolderData = req.body;
   const result = await DocumentSubfolderServices.createDocumentSubfolderIntoDB(DocumentSubfolderData);
 
   sendResponse(res, {
@@ -41,7 +41,7 @@ const getAllDocumentSubfolders = catchAsync(async (req, res) => {
 
 const updateDocumentSubfolder = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { DocumentSubfolder } = req.body;
+  const DocumentSubfolder = req.body;
   const result = await DocumentSubfolderServices.updateDocumentSubfolderIntoDB(id, DocumentSubfolder);
 
   sendResponse(res, {

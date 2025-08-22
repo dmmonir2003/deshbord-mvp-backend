@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 export type TDocumentSubfolder = {
   title: string;
   documentId: Types.ObjectId;
+  projectId: Types.ObjectId;
   isDeleted: boolean;
 };
 

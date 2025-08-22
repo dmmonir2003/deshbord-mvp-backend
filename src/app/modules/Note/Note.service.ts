@@ -195,8 +195,8 @@ const getSingleNoteFromDB = async (id: string) => {
   return result;
 };
 
-const updateNoteIntoDB = async (id: string, payload: any, user: any) => {
 
+const updateNoteIntoDB = async (id: string, payload: any, user: any) => {
 if(payload.status){
 
   const note = await mongoose.connection
@@ -224,21 +224,19 @@ if(payload.status){
     throw new Error('Note not found after update');
   }
 
-   console.log('payload.status',updatedNote.status);
+   console.log('updated Note',updatedNote);
 
    if( updatedNote.status === 'approved' ) {
-       console.log('updatedData.projectId======', updatedNote.projectId);
-       console.log('user.email======', user.userEmail);
       // get last quote from db
   const projectId = updatedNote.projectId;
   const userId = await User.isUserExistsByCustomEmail(user.userEmail)
   .then(
     (user: any) => {
-      console.log('user',user);
+      // console.log('user',user);
       return user?._id
     } 
   )
-  console.log('usr',userId);
+
 
   // const userId = updatedData.userId; 
   const lastQuote = await Quote.findOne({
@@ -256,12 +254,9 @@ if(payload.status){
     //   select: "name image"
     // });
 
-    // console.log('lastQuote++++++++++',lastQuote);
-    // console.log('updatedNote++++++++++',updatedNote);
-    // console.log('updatedNote.value',updatedNote.value);
-    // console.log('lastQuote?.value++++++++++',lastQuote?.value);
-    // console.log('updatedNote?._id+++++++++',updatedNote?._id);
-  const newValue = updatedNote.value+(lastQuote?.value as any);
+
+    const newValue = updatedNote.value+(lastQuote?.value as any);
+    // console.log('newValue',newValue);
     const newQuoteData =  {
       projectId: lastQuote?.projectId,
       title: lastQuote?.title,
@@ -270,6 +265,9 @@ if(payload.status){
       value: newValue,
       sharedWith: lastQuote?.sharedWith
     }
+
+  // console.log('newQuoteData',newQuoteData);
+
     const newQuote = await Quote.create(newQuoteData);
     if (!newQuote) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Quote');

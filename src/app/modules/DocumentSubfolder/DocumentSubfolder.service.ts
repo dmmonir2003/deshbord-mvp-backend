@@ -2,7 +2,7 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { DocumentSubfolderSearchableFields } from './DocumentSubfolder.constant';
+import { DOCUMENTSUBFOLDER_SEARCHABLE_FIELDS } from './DocumentSubfolder.constant';
 import mongoose from 'mongoose';
 import { TDocumentSubfolder } from './DocumentSubfolder.interface';
 import { DocumentSubfolder } from './DocumentSubfolder.model';
@@ -10,8 +10,11 @@ import { DocumentSubfolder } from './DocumentSubfolder.model';
 const createDocumentSubfolderIntoDB = async (
   payload: TDocumentSubfolder,
 ) => {
+
+  console.log('payload', payload);
+
   const result = await DocumentSubfolder.create(payload);
-  
+   console.log('result', result);
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create DocumentSubfolder');
   }
@@ -24,7 +27,7 @@ const getAllDocumentSubfoldersFromDB = async (query: Record<string, unknown>) =>
     DocumentSubfolder.find(),
     query,
   )
-    .search(DocumentSubfolderSearchableFields)
+    .search(DOCUMENTSUBFOLDER_SEARCHABLE_FIELDS)
     .filter()
     .sort()
     .paginate()
@@ -49,10 +52,9 @@ const updateDocumentSubfolderIntoDB = async (id: string, payload: any) => {
     .collection('documentsubfolders')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) },
-      { projection: { isDeleted: 1, name: 1 } },
     );
 
-  if (!isDeletedService?.name) {
+  if (!isDeletedService) {
     throw new Error('DocumentSubfolder not found');
   }
 
@@ -74,9 +76,9 @@ const updateDocumentSubfolderIntoDB = async (id: string, payload: any) => {
 };
 
 const deleteDocumentSubfolderFromDB = async (id: string) => {
-  const deletedService = await DocumentSubfolder.findByIdAndUpdate(
+  const deletedService = await DocumentSubfolder.findByIdAndDelete(
     id,
-    { isDeleted: true },
+    // { isDeleted: true },
     { new: true },
   );
 

@@ -6,7 +6,7 @@ import { createDocumentSubfolderValidationSchema, updateDocumentSubfolderValidat
 const router = express.Router();
 
 router.post(
-  '/create-DocumentSubfolder',
+  '/create-sub-document',
   validateRequest(createDocumentSubfolderValidationSchema),
   DocumentSubfolderControllers.createDocumentSubfolder,
 );
