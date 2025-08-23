@@ -3,18 +3,38 @@ import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { SITEREPORT_SEARCHABLE_FIELDS } from './SiteReport.constant';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { TSiteReport } from './SiteReport.interface';
 import { SiteReport } from './SiteReport.model';
+import { User } from '../User/user.model';
 
 const createSiteReportIntoDB = async (
   payload: TSiteReport,
-  files: string[],
+  files: any,
 ) => {
 
-    if(files){
-    payload.file = files; // Assuming file.location contains the S3 URL
-  } 
+// Example: get overview files
+const overviewFiles = files['overviewFile']?.map((f:any) => f.location) || [];
+const weatherFiles = files['weather']?.map((f:any) => f.location) || [];
+const workingDayFiles = files['workingDays']?.map((f:any) => f.location) || [];
+const laborTeamFiles = files['LaborTeam']?.map((f:any) => f.location) || [];
+
+
+
+    if(overviewFiles.length > 0){
+      payload.overviewFile = overviewFiles; // Assuming file.location contains the S3 URL
+    }
+    if(weatherFiles.length > 0){
+      payload.weather = weatherFiles; // Assuming file.location contains the S3 URL
+    }
+    if(workingDayFiles.length > 0){
+      payload.workingDays = workingDayFiles; // Assuming file.location contains the S3 URL
+    }
+    if(laborTeamFiles.length > 0){
+      payload.LaborTeam = laborTeamFiles; // Assuming file.location contains the S3 URL
+    }
+
+  console.log('Payload in service:', payload);
 
   const result = await SiteReport.create(payload);
   
@@ -24,6 +44,68 @@ const createSiteReportIntoDB = async (
 
   return result;
 };
+
+const shareSiteReportIntoDB = async (
+  projectId: string,
+  sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
+  user?: any
+) => {
+
+  const { userEmail } = user;
+  const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
+    (user: any) => user?._id
+  );
+
+  if (!sharedBy) {
+    throw new Error('Shared by user not found');
+  }
+
+  const sharedEntries = sharedWith.map(entry => ({
+    userId: new Types.ObjectId(entry.userId),
+    role: entry.role,
+    sharedBy: new Types.ObjectId(sharedBy),
+  }));
+
+  const project = await SiteReport.findByIdAndUpdate(
+    projectId,
+    { $addToSet: { sharedWith: { $each: sharedEntries } } },
+    { new: true }
+  );
+
+  if (!project) {
+    throw new Error('Project not found or update failed');
+  }
+
+  return project;
+};
+const unShareSiteReportIntoDB = async (
+ projectId : string,
+   userIds: string[],
+ ) => {
+ 
+   if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+     throw new Error('No user IDs provided for unsharing');
+   }
+   
+  const updatedProject = await SiteReport.findByIdAndUpdate(
+     projectId,
+     {
+       $pull: {
+         sharedWith: {
+           userId: { $in: userIds.map(id => new Types.ObjectId(id)) } // 🔄 remove multiple
+         }
+       }
+     },
+     { new: true }
+   );
+ 
+   if (!updatedProject) {
+     throw new Error('Project not found or unshare failed');
+   }
+ 
+   return updatedProject;
+};
+
 
 const getAllSiteReportsFromDB = async (query: Record<string, unknown>) => {
   const SiteReportQuery = new QueryBuilder(
@@ -103,4 +185,6 @@ export const SiteReportServices = {
   getSingleSiteReportFromDB,
   updateSiteReportIntoDB,
   deleteSiteReportFromDB,
+  shareSiteReportIntoDB,
+  unShareSiteReportIntoDB,
 };
