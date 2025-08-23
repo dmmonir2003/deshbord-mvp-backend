@@ -4,10 +4,18 @@ import sendResponse from '../../utils/sendResponse';
 import { SiteReportServices } from './SiteReport.service';
 import {  Express } from 'express';
 const createSiteReport = catchAsync(async (req, res) => {
-      const fileUrls = (req.files as Express.MulterS3.File[]).map(f => f.location); 
+  // const fileUrls = (req.files as Express.MulterS3.File[]).map(f => f.location); 
+const files = req.files as {
+  [fieldname: string]: Express.MulterS3.File[];
+};
 
+
+
+
+
+      
   const SiteReportData = req.body;
-  const result = await SiteReportServices.createSiteReportIntoDB(SiteReportData, fileUrls);
+  const result = await SiteReportServices.createSiteReportIntoDB(SiteReportData, files);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -16,6 +24,32 @@ const createSiteReport = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const shareSiteReport = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {sharedWith} = req.body;
+  const result = await SiteReportServices.shareSiteReportIntoDB(id, sharedWith, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+const unShareSiteReport = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {unShareWith } = req.body;
+  const result = await SiteReportServices.unShareSiteReportIntoDB(id, unShareWith);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+
 
 const getSingleSiteReport = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -73,4 +107,6 @@ export const SiteReportControllers = {
   getAllSiteReports,
   updateSiteReport,
   deleteSiteReport,
+  unShareSiteReport,
+  shareSiteReport,
 };

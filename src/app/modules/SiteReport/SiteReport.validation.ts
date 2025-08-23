@@ -2,22 +2,21 @@ import { z } from 'zod';
 
 export const createSiteReportValidationSchema = z.object({
   body: z.object({
-    SiteReport: z.object({
-      name: z.string().min(1),
-      description: z.string().optional(),
-      atcCodes: z.string().min(1),
-      isDeleted: z.boolean().default(false),
-    }),
+      projectId: z.string().min(1),
+      overviewText: z.string(),
   }),
 });
 
+
 export const updateSiteReportValidationSchema = z.object({
   body: z.object({
-    SiteReport: z.object({
-      name: z.string().optional(),
-      description: z.string().optional(),
-      atcCodes: z.string().optional(),
+      projectId: z.string().optional(), 
+      overviewText: z.string().optional(), 
+      overviewFile: z.string().optional(), 
+      date: z.string().optional(), 
+      weather: z.string().optional(),
+      workingDays: z.string().optional(),
+      LaborTeam: z.string().optional(),
       isDeleted: z.boolean().optional(),
-    }),
   }),
 });
