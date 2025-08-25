@@ -28,6 +28,7 @@ import { SiteReportRoutes } from '../modules/SiteReport/SiteReport.route';
 import { SecondFixFolderRoutes } from '../modules/SecondFixFolder/SecondFixFolder.route';
 import { SecondFixSubFolderRoutes } from '../modules/SecondFixSubFolder/SecondFixSubFolder.route';
 import { SecondFixFileRoutes } from '../modules/SecondFixFile/SecondFixFile.route';
+import { HandoverRoutes } from '../modules/Handover/Handover.route';
 
 const router = Router();
 
@@ -147,6 +148,10 @@ const moduleRoutes = [
   {
     path: '/second-fix-files',
     route: SecondFixFileRoutes,
+  },
+  {
+    path: '/handovers',
+    route: HandoverRoutes,
   },
 
 ];
