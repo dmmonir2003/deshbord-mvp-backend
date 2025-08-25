@@ -5,7 +5,6 @@ import { DocumentServices } from './Document.service';
 
 const createDocument = catchAsync(async (req, res) => {
   const DocumentData = req.body;
-  console.log('DocumentData', DocumentData);
   const result = await DocumentServices.createDocumentIntoDB(DocumentData);
 
   sendResponse(res, {
