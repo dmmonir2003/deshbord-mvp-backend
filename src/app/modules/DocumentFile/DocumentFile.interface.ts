@@ -3,6 +3,7 @@ import { Model, Types} from 'mongoose';
 
 export type TDocumentFile = {
     file: string;
+    title: string;
     documentSubFolderId: Types.ObjectId;
     projectId: Types.ObjectId;
     sharedWith?: {
