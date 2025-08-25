@@ -28,6 +28,10 @@ import { SiteReportRoutes } from '../modules/SiteReport/SiteReport.route';
 import { SecondFixFolderRoutes } from '../modules/SecondFixFolder/SecondFixFolder.route';
 import { SecondFixSubFolderRoutes } from '../modules/SecondFixSubFolder/SecondFixSubFolder.route';
 import { SecondFixFileRoutes } from '../modules/SecondFixFile/SecondFixFile.route';
+import { HandoverRoutes } from '../modules/Handover/Handover.route';
+import { HandoverCombineRoutes } from '../modules/HandoverCombine/HandoverCombine.route';
+import { TimeScheduleRoutes } from '../modules/TimeSchedule/TimeSchedule.route';
+import { SnaggingRoutes } from '../modules/Snagging/Snagging.route';
 
 const router = Router();
 
@@ -147,6 +151,22 @@ const moduleRoutes = [
   {
     path: '/second-fix-files',
     route: SecondFixFileRoutes,
+  },
+  {
+    path: '/handovers',
+    route: HandoverRoutes,
+  },
+  {
+    path: '/handover-combines',
+    route: HandoverCombineRoutes,
+  },
+  {
+    path: '/time-schedules',
+    route: TimeScheduleRoutes,
+  },
+  {
+    path: '/snaggings',
+    route: SnaggingRoutes,
   },
 
 ];

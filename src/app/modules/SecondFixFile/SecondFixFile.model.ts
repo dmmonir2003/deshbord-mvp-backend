@@ -1,32 +1,44 @@
 import { Schema, model } from 'mongoose';
-      import { TSecondFixFile, SecondFixFileModel } from './SecondFixFile.interface';
-      
-      const SecondFixFileSchema = new Schema<TSecondFixFile, SecondFixFileModel>({
-        file: { type: String, required: true },
-  title: { type: String, required: true },
-  secondFixSubFolder: {
-    type: Schema.Types.ObjectId,
-    ref: 'Document',
-    required: true,
-  },
-  projectId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Project',
-    required: true,
-  },
-  sharedWith: [
-    {
-      userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-      role: { type: String, enum: ['client', 'basicAdmin'], required: true },
-      sharedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+import { TSecondFixFile, SecondFixFileModel } from './SecondFixFile.interface';
+
+const SecondFixFileSchema = new Schema<TSecondFixFile, SecondFixFileModel>(
+  {
+    file: { type: String, required: true },
+    room: { type: String, required: true },
+    surface: { type: String, required: true },
+    productCode: { type: String, required: true },
+    suplierName: { type: String, required: true },
+    text: { type: String, required: true },
+    title: { type: String, required: true },
+    secondFixSubFolder: {
+      type: Schema.Types.ObjectId,
+      ref: 'Document',
+      required: true,
     },
-  ],
-  isDeleted: { type: Boolean, default: false },
-      }, { timestamps: true });
-      
-      SecondFixFileSchema.statics.isSecondFixFileExists = async function (id: string) {
-        return await this.findOne({ _id: id, isDeleted: false });
-      };
-      
-      export const SecondFixFile = model<TSecondFixFile, SecondFixFileModel>('SecondFixFile', SecondFixFileSchema);
-      
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
+      required: true,
+    },
+    sharedWith: [
+      {
+        userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+        role: { type: String, enum: ['client', 'basicAdmin'], required: true },
+        sharedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      },
+    ],
+    isDeleted: { type: Boolean, default: false },
+  },
+  { timestamps: true },
+);
+
+SecondFixFileSchema.statics.isSecondFixFileExists = async function (
+  id: string,
+) {
+  return await this.findOne({ _id: id, isDeleted: false });
+};
+
+export const SecondFixFile = model<TSecondFixFile, SecondFixFileModel>(
+  'SecondFixFile',
+  SecondFixFileSchema,
+);

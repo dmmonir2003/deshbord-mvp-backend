@@ -2,35 +2,30 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { SECONDFIXFILE_SEARCHABLE_FIELDS } from './SecondFixFile.constant';
+import { TIMESCHEDULE_SEARCHABLE_FIELDS } from './TimeSchedule.constant';
 import mongoose, { Types } from 'mongoose';
-import { TSecondFixFile } from './SecondFixFile.interface';
-import { SecondFixFile } from './SecondFixFile.model';
+import { TTimeSchedule } from './TimeSchedule.interface';
+import { TimeSchedule } from './TimeSchedule.model';
 import { User } from '../User/user.model';
 
-const createSecondFixFileIntoDB = async (
-  payload: TSecondFixFile,
+const createTimeScheduleIntoDB = async (
+  payload: TTimeSchedule,
   file?:any
 ) => {
-
   if(file){
     payload.file = file.location;
-    // payload.fileKey = file.key;
-    // payload.fileName = file.originalname;
-    // payload.fileMimeType = file.mimetype;
-    // payload.fileSize = file.size;
   }
-
-  const result = await SecondFixFile.create(payload);
+  const result = await TimeSchedule.create(payload);
   
   if (!result) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create SecondFixFile');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create TimeSchedule');
   }
 
   return result;
 };
 
-const shareSecondFixFileIntoDB = async (
+
+const shareTimeScheduleIntoDB = async (
   projectId: string,
   sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
   user?: any
@@ -51,7 +46,7 @@ const shareSecondFixFileIntoDB = async (
     sharedBy: new Types.ObjectId(sharedBy),
   }));
 
-  const project = await SecondFixFile.findByIdAndUpdate(
+  const project = await TimeSchedule.findByIdAndUpdate(
     projectId,
     { $addToSet: { sharedWith: { $each: sharedEntries } } },
     { new: true }
@@ -63,7 +58,7 @@ const shareSecondFixFileIntoDB = async (
 
   return project;
 };
-const unShareSecondFixFileIntoDB = async (
+const unShareTimeScheduleIntoDB = async (
  projectId : string,
    userIds: string[],
  ) => {
@@ -72,7 +67,7 @@ const unShareSecondFixFileIntoDB = async (
      throw new Error('No user IDs provided for unsharing');
    }
    
-  const updatedProject = await SecondFixFile.findByIdAndUpdate(
+  const updatedProject = await TimeSchedule.findByIdAndUpdate(
      projectId,
      {
        $pull: {
@@ -92,27 +87,27 @@ const unShareSecondFixFileIntoDB = async (
 };
 
 
-const getAllSecondFixFilesFromDB = async (query: Record<string, unknown>) => {
-  const SecondFixFileQuery = new QueryBuilder(
-    SecondFixFile.find(),
+const getAllTimeSchedulesFromDB = async (query: Record<string, unknown>) => {
+  const TimeScheduleQuery = new QueryBuilder(
+    TimeSchedule.find(),
     query,
   )
-    .search(SECONDFIXFILE_SEARCHABLE_FIELDS)
+    .search(TIMESCHEDULE_SEARCHABLE_FIELDS)
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await SecondFixFileQuery.modelQuery;
-  const meta = await SecondFixFileQuery.countTotal();
+  const result = await TimeScheduleQuery.modelQuery;
+  const meta = await TimeScheduleQuery.countTotal();
   return {
     result,
     meta,
   };
 };
 
-const getSingleSecondFixFileFromDB = async (id: string) => {
-  const result = await SecondFixFile.findById(id).populate({
+const getSingleTimeScheduleFromDB = async (id: string) => {
+  const result = await TimeSchedule.findById(id).populate({
       path: "sharedWith.userId", // field to populate
       select: "name profileImg role", // only return what you need
     });
@@ -120,59 +115,59 @@ const getSingleSecondFixFileFromDB = async (id: string) => {
   return result;
 };
 
-const updateSecondFixFileIntoDB = async (id: string, payload: any, file?:any) => {
+const updateTimeScheduleIntoDB = async (id: string, payload: any, file?:any) => {
 
-  if(file){
+    if(file){
     payload.file = file.location;
   }
 
   const isDeletedService = await mongoose.connection
-    .collection('secondfixfiles')
+    .collection('timeschedules')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) },
     );
 
   if (!isDeletedService) {
-    throw new Error('SecondFixFile not found');
+    throw new Error('TimeSchedule not found');
   }
 
   if (isDeletedService.isDeleted) {
-    throw new Error('Cannot update a deleted SecondFixFile');
+    throw new Error('Cannot update a deleted TimeSchedule');
   }
 
-  const updatedData = await SecondFixFile.findByIdAndUpdate(
+  const updatedData = await TimeSchedule.findByIdAndUpdate(
     { _id: id },
     payload,
     { new: true, runValidators: true },
   );
 
   if (!updatedData) {
-    throw new Error('SecondFixFile not found after update');
+    throw new Error('TimeSchedule not found after update');
   }
 
   return updatedData;
 };
 
-const deleteSecondFixFileFromDB = async (id: string) => {
-  const deletedService = await SecondFixFile.findByIdAndDelete(
+const deleteTimeScheduleFromDB = async (id: string) => {
+  const deletedService = await TimeSchedule.findByIdAndDelete(
     id,
     // { isDeleted: true },
     { new: true },
   );
 
   if (!deletedService) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete SecondFixFile');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete TimeSchedule');
   }
 
   return deletedService;
 };
 
-export const SecondFixFileServices = {
-  createSecondFixFileIntoDB,
-  getAllSecondFixFilesFromDB,
-  getSingleSecondFixFileFromDB,
-  updateSecondFixFileIntoDB,
-  deleteSecondFixFileFromDB,
-  unShareSecondFixFileIntoDB,
-  shareSecondFixFileIntoDB
+export const TimeScheduleServices = {
+  createTimeScheduleIntoDB,
+  getAllTimeSchedulesFromDB,
+  getSingleTimeScheduleFromDB,
+  updateTimeScheduleIntoDB,
+  deleteTimeScheduleFromDB,
+  shareTimeScheduleIntoDB, 
+  unShareTimeScheduleIntoDB
 };
