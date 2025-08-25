@@ -30,6 +30,7 @@ import { SecondFixSubFolderRoutes } from '../modules/SecondFixSubFolder/SecondFi
 import { SecondFixFileRoutes } from '../modules/SecondFixFile/SecondFixFile.route';
 import { HandoverRoutes } from '../modules/Handover/Handover.route';
 import { HandoverCombineRoutes } from '../modules/HandoverCombine/HandoverCombine.route';
+import { TimeScheduleRoutes } from '../modules/TimeSchedule/TimeSchedule.route';
 
 const router = Router();
 
@@ -157,6 +158,10 @@ const moduleRoutes = [
   {
     path: '/handover-combines',
     route: HandoverCombineRoutes,
+  },
+  {
+    path: '/time-schedules',
+    route: TimeScheduleRoutes,
   },
 
 ];
