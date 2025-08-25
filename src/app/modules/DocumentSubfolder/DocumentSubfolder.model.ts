@@ -16,7 +16,7 @@ const DocumentSubfolderSchema = new Schema<
     required: true,
   },
   isDeleted: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 DocumentSubfolderSchema.statics.isDocumentSubfolderExists = async function (
   id: string,
