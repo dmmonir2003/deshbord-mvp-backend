@@ -26,6 +26,7 @@ import { SitePictureRoutes } from '../modules/SitePictureFolder/SitePicture.rout
 import { SitePictureImageRoutes } from '../modules/SitePictureImage/SitePictureImage.route';
 import { SiteReportRoutes } from '../modules/SiteReport/SiteReport.route';
 import { SecondFixFolderRoutes } from '../modules/SecondFixFolder/SecondFixFolder.route';
+import { SecondFixSubFolderRoutes } from '../modules/SecondFixSubFolder/SecondFixSubFolder.route';
 
 const router = Router();
 
@@ -137,6 +138,10 @@ const moduleRoutes = [
   {
     path: '/second-fix-folders',
     route: SecondFixFolderRoutes,
+  },
+  {
+    path: '/sub-second-fix-folders',
+    route: SecondFixSubFolderRoutes,
   },
 
 ];
