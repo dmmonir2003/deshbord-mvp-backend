@@ -31,6 +31,7 @@ import { SecondFixFileRoutes } from '../modules/SecondFixFile/SecondFixFile.rout
 import { HandoverRoutes } from '../modules/Handover/Handover.route';
 import { HandoverCombineRoutes } from '../modules/HandoverCombine/HandoverCombine.route';
 import { TimeScheduleRoutes } from '../modules/TimeSchedule/TimeSchedule.route';
+import { SnaggingRoutes } from '../modules/Snagging/Snagging.route';
 
 const router = Router();
 
@@ -162,6 +163,10 @@ const moduleRoutes = [
   {
     path: '/time-schedules',
     route: TimeScheduleRoutes,
+  },
+  {
+    path: '/snaggings',
+    route: SnaggingRoutes,
   },
 
 ];

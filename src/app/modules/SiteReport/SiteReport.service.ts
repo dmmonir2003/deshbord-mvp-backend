@@ -129,7 +129,7 @@ const getSingleSiteReportFromDB = async (id: string) => {
   const result = await SiteReport.findById(id).populate({
       path: "sharedWith.userId", // field to populate
       select: "name profileImg email role", // only return what you need
-    });;
+    });
 
   return result;
 };
