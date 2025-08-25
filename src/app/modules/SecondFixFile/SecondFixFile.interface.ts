@@ -1,10 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 export type TSecondFixFile = {
-  name: string;
-  description?: string;
-  atcCodes: string;
+   file: string;
+    title: string;
+    secondFixSubFolder: Types.ObjectId;
+    projectId: Types.ObjectId;
+    sharedWith?: {
+    userId: Types.ObjectId;
+    role: 'client' | 'basicAdmin';
+    sharedBy: Types.ObjectId;
+  }[];
   isDeleted: boolean;
 };
 

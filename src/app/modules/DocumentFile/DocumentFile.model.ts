@@ -22,7 +22,7 @@ const DocumentFileSchema = new Schema<TDocumentFile, DocumentFileModel>({
     },
   ],
   isDeleted: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 DocumentFileSchema.statics.isDocumentFileExists = async function (id: string) {
   return await this.findOne({ _id: id, isDeleted: false });

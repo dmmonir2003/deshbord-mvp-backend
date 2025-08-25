@@ -2,14 +2,25 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { SecondFixFileSearchableFields } from './SecondFixFile.constant';
-import mongoose from 'mongoose';
+import { SECONDFIXFILE_SEARCHABLE_FIELDS } from './SecondFixFile.constant';
+import mongoose, { Types } from 'mongoose';
 import { TSecondFixFile } from './SecondFixFile.interface';
 import { SecondFixFile } from './SecondFixFile.model';
+import { User } from '../User/user.model';
 
 const createSecondFixFileIntoDB = async (
   payload: TSecondFixFile,
+  file?:any
 ) => {
+
+  if(file){
+    payload.file = file.location;
+    // payload.fileKey = file.key;
+    // payload.fileName = file.originalname;
+    // payload.fileMimeType = file.mimetype;
+    // payload.fileSize = file.size;
+  }
+
   const result = await SecondFixFile.create(payload);
   
   if (!result) {
@@ -19,12 +30,74 @@ const createSecondFixFileIntoDB = async (
   return result;
 };
 
+const shareSecondFixFileIntoDB = async (
+  projectId: string,
+  sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
+  user?: any
+) => {
+
+  const { userEmail } = user;
+  const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
+    (user: any) => user?._id
+  );
+
+  if (!sharedBy) {
+    throw new Error('Shared by user not found');
+  }
+
+  const sharedEntries = sharedWith.map(entry => ({
+    userId: new Types.ObjectId(entry.userId),
+    role: entry.role,
+    sharedBy: new Types.ObjectId(sharedBy),
+  }));
+
+  const project = await SecondFixFile.findByIdAndUpdate(
+    projectId,
+    { $addToSet: { sharedWith: { $each: sharedEntries } } },
+    { new: true }
+  );
+
+  if (!project) {
+    throw new Error('DocumentFile not found or update failed');
+  }
+
+  return project;
+};
+const unShareSecondFixFileIntoDB = async (
+ projectId : string,
+   userIds: string[],
+ ) => {
+ 
+   if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+     throw new Error('No user IDs provided for unsharing');
+   }
+   
+  const updatedProject = await SecondFixFile.findByIdAndUpdate(
+     projectId,
+     {
+       $pull: {
+         sharedWith: {
+           userId: { $in: userIds.map(id => new Types.ObjectId(id)) } // 🔄 remove multiple
+         }
+       }
+     },
+     { new: true }
+   );
+ 
+   if (!updatedProject) {
+     throw new Error('Project not found or unshare failed');
+   }
+ 
+   return updatedProject;
+};
+
+
 const getAllSecondFixFilesFromDB = async (query: Record<string, unknown>) => {
   const SecondFixFileQuery = new QueryBuilder(
     SecondFixFile.find(),
     query,
   )
-    .search(SecondFixFileSearchableFields)
+    .search(SECONDFIXFILE_SEARCHABLE_FIELDS)
     .filter()
     .sort()
     .paginate()
@@ -44,15 +117,19 @@ const getSingleSecondFixFileFromDB = async (id: string) => {
   return result;
 };
 
-const updateSecondFixFileIntoDB = async (id: string, payload: any) => {
+const updateSecondFixFileIntoDB = async (id: string, payload: any, file?:any) => {
+
+  if(file){
+    payload.file = file.location;
+  }
+
   const isDeletedService = await mongoose.connection
     .collection('secondfixfiles')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) },
-      { projection: { isDeleted: 1, name: 1 } },
     );
 
-  if (!isDeletedService?.name) {
+  if (!isDeletedService) {
     throw new Error('SecondFixFile not found');
   }
 
@@ -74,9 +151,9 @@ const updateSecondFixFileIntoDB = async (id: string, payload: any) => {
 };
 
 const deleteSecondFixFileFromDB = async (id: string) => {
-  const deletedService = await SecondFixFile.findByIdAndUpdate(
+  const deletedService = await SecondFixFile.findByIdAndDelete(
     id,
-    { isDeleted: true },
+    // { isDeleted: true },
     { new: true },
   );
 
@@ -93,4 +170,6 @@ export const SecondFixFileServices = {
   getSingleSecondFixFileFromDB,
   updateSecondFixFileIntoDB,
   deleteSecondFixFileFromDB,
+  unShareSecondFixFileIntoDB,
+  shareSecondFixFileIntoDB
 };

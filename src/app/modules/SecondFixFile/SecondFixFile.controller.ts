@@ -4,8 +4,8 @@ import sendResponse from '../../utils/sendResponse';
 import { SecondFixFileServices } from './SecondFixFile.service';
 
 const createSecondFixFile = catchAsync(async (req, res) => {
-  const { SecondFixFile: SecondFixFileData } = req.body;
-  const result = await SecondFixFileServices.createSecondFixFileIntoDB(SecondFixFileData);
+  const SecondFixFileData = req.body;
+  const result = await SecondFixFileServices.createSecondFixFileIntoDB(SecondFixFileData, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -14,6 +14,32 @@ const createSecondFixFile = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const shareSecondFixFile = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {sharedWith} = req.body;
+  const result = await SecondFixFileServices.shareSecondFixFileIntoDB(id, sharedWith, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+const unShareSecondFixFile = catchAsync(async (req, res) => {
+      const { id } = req.params;
+  const {unShareWith } = req.body;
+  const result = await SecondFixFileServices.unShareSecondFixFileIntoDB(id, unShareWith);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project is created successfully',
+    data: result,
+  });
+});
+
 
 const getSingleSecondFixFile = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -41,8 +67,8 @@ const getAllSecondFixFiles = catchAsync(async (req, res) => {
 
 const updateSecondFixFile = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { SecondFixFile } = req.body;
-  const result = await SecondFixFileServices.updateSecondFixFileIntoDB(id, SecondFixFile);
+  const SecondFixFile = req.body;
+  const result = await SecondFixFileServices.updateSecondFixFileIntoDB(id, SecondFixFile, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -70,4 +96,6 @@ export const SecondFixFileControllers = {
   getAllSecondFixFiles,
   updateSecondFixFile,
   deleteSecondFixFile,
+  shareSecondFixFile,
+  unShareSecondFixFile
 };
