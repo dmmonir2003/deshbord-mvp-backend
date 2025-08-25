@@ -10,6 +10,8 @@ const router = express.Router();
 
 router.post(
   '/create-site-report',
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+
   // uploadFileS3(true).array('file', 5),
      uploadFileS3(true).fields([
   { name: 'overviewFile', maxCount: 5 },
@@ -46,13 +48,19 @@ router.post(
 
 router.get(
   '/:id',
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin,  USER_ROLE.client, USER_ROLE.basicAdmin),
   SiteReportControllers.getSingleSiteReport,
 );
 
 router.patch(
   '/:id',
-  uploadFileS3(true).array('file', 5),
-    //  uploadFileS3(true).single('file'),
+      auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+     uploadFileS3(true).fields([
+  { name: 'overviewFile', maxCount: 5 },
+  { name: 'weather', maxCount: 5 },
+  { name: 'workingDays', maxCount: 5 },
+  { name: 'LaborTeam', maxCount: 5 },
+]),
      (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
         try {
@@ -69,11 +77,13 @@ router.patch(
 
 router.delete(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   SiteReportControllers.deleteSiteReport,
 );
 
 router.get(
   '/',
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin,  USER_ROLE.client, USER_ROLE.basicAdmin),
   SiteReportControllers.getAllSiteReports,
 );
 
