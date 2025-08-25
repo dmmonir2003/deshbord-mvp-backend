@@ -29,6 +29,7 @@ import { SecondFixFolderRoutes } from '../modules/SecondFixFolder/SecondFixFolde
 import { SecondFixSubFolderRoutes } from '../modules/SecondFixSubFolder/SecondFixSubFolder.route';
 import { SecondFixFileRoutes } from '../modules/SecondFixFile/SecondFixFile.route';
 import { HandoverRoutes } from '../modules/Handover/Handover.route';
+import { HandoverCombineRoutes } from '../modules/HandoverCombine/HandoverCombine.route';
 
 const router = Router();
 
@@ -152,6 +153,10 @@ const moduleRoutes = [
   {
     path: '/handovers',
     route: HandoverRoutes,
+  },
+  {
+    path: '/handover-combines',
+    route: HandoverCombineRoutes,
   },
 
 ];
