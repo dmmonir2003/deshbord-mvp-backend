@@ -3,12 +3,12 @@ import { Model, Types } from 'mongoose';
 
 export type TSiteReport = {
   overviewText: string;
-  overviewFile: string;
+  overviewFile: string[];
   projectId: Types.ObjectId;
   date : Date;
-  weather: string;
-  workingDays: string;
-  LaborTeam: string;
+  weather: string[];
+  workingDays: string[];
+  LaborTeam: string[];
   sharedWith?: {
     userId: Types.ObjectId;
     role: 'client' | 'basicAdmin';

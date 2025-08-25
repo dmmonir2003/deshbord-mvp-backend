@@ -32,9 +32,7 @@ const laborTeamFiles = files['LaborTeam']?.map((f:any) => f.location) || [];
     }
     if(laborTeamFiles.length > 0){
       payload.LaborTeam = laborTeamFiles; // Assuming file.location contains the S3 URL
-    }
-
-  console.log('Payload in service:', payload);
+    } 
 
   const result = await SiteReport.create(payload);
   
@@ -108,6 +106,7 @@ const unShareSiteReportIntoDB = async (
 
 
 const getAllSiteReportsFromDB = async (query: Record<string, unknown>) => {
+
   const SiteReportQuery = new QueryBuilder(
     SiteReport.find(),
     query,
@@ -127,16 +126,38 @@ const getAllSiteReportsFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleSiteReportFromDB = async (id: string) => {
-  const result = await SiteReport.findById(id);
+  const result = await SiteReport.findById(id).populate({
+      path: "sharedWith.userId", // field to populate
+      select: "name profileImg email role", // only return what you need
+    });;
 
   return result;
 };
 
 const updateSiteReportIntoDB = async (id: string, payload: any, files?: any) => {
 
-  if(files){
-    payload.file = files; // Assuming file.location contains the S3 URL
-  } 
+// Example: get overview files
+const overviewFiles = files['overviewFile']?.map((f:any) => f.location) || [];
+const weatherFiles = files['weather']?.map((f:any) => f.location) || [];
+const workingDayFiles = files['workingDays']?.map((f:any) => f.location) || [];
+const laborTeamFiles = files['LaborTeam']?.map((f:any) => f.location) || [];
+
+
+
+    if(overviewFiles.length > 0){
+      payload.overviewFile = overviewFiles; // Assuming file.location contains the S3 URL
+    }
+    if(weatherFiles.length > 0){
+      payload.weather = weatherFiles; // Assuming file.location contains the S3 URL
+    }
+    if(workingDayFiles.length > 0){
+      payload.workingDays = workingDayFiles; // Assuming file.location contains the S3 URL
+    }
+    if(laborTeamFiles.length > 0){
+      payload.LaborTeam = laborTeamFiles; // Assuming file.location contains the S3 URL
+    }
+
+  console.log('Payload in service:', payload);
 
   const isDeletedService = await mongoose.connection
     .collection('sitereports')

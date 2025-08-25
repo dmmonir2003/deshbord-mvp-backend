@@ -12,11 +12,11 @@ export const updateSiteReportValidationSchema = z.object({
   body: z.object({
       projectId: z.string().optional(), 
       overviewText: z.string().optional(), 
-      overviewFile: z.string().optional(), 
+      overviewFile: z.array(z.string()).optional(), 
       date: z.string().optional(), 
-      weather: z.string().optional(),
-      workingDays: z.string().optional(),
-      LaborTeam: z.string().optional(),
+      weather: z.array(z.string()).optional(), 
+      workingDays: z.array(z.string()).optional(), 
+      LaborTeam: z.array(z.string()).optional(), 
       isDeleted: z.boolean().optional(),
   }),
 });

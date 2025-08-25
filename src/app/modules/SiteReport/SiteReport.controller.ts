@@ -8,12 +8,7 @@ const createSiteReport = catchAsync(async (req, res) => {
 const files = req.files as {
   [fieldname: string]: Express.MulterS3.File[];
 };
-
-
-
-
-
-      
+   
   const SiteReportData = req.body;
   const result = await SiteReportServices.createSiteReportIntoDB(SiteReportData, files);
 
@@ -76,10 +71,16 @@ const getAllSiteReports = catchAsync(async (req, res) => {
 });
 
 const updateSiteReport = catchAsync(async (req, res) => {
-  const fileUrls = (req.files as Express.MulterS3.File[]).map(f => f.location); 
+  // const fileUrls = (req.files as Express.MulterS3.File[]).map(f => f.location); 
+
+  const files = req.files as {
+  [fieldname: string]: Express.MulterS3.File[];
+};
   const { id } = req.params;
   const SiteReport= req.body;
-  const result = await SiteReportServices.updateSiteReportIntoDB(id, SiteReport, fileUrls);
+
+  // const result = await SiteReportServices.updateSiteReportIntoDB(id, SiteReport, fileUrls);
+  const result = await SiteReportServices.updateSiteReportIntoDB(id, SiteReport, files);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

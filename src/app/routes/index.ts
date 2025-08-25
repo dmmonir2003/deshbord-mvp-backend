@@ -24,6 +24,7 @@ import { DocumentSubfolderRoutes } from '../modules/DocumentSubfolder/DocumentSu
 import { DocumentFileRoutes } from '../modules/DocumentFile/DocumentFile.route';
 import { SitePictureRoutes } from '../modules/SitePictureFolder/SitePicture.route';
 import { SitePictureImageRoutes } from '../modules/SitePictureImage/SitePictureImage.route';
+import { SiteReportRoutes } from '../modules/SiteReport/SiteReport.route';
 
 const router = Router();
 
@@ -127,6 +128,10 @@ const moduleRoutes = [
   {
     path: '/site-picture-Images',
     route: SitePictureImageRoutes,
+  },
+  {
+    path: '/site-reports',
+    route: SiteReportRoutes,
   },
 
 ];
