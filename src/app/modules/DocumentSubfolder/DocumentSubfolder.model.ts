@@ -8,7 +8,7 @@ const DocumentSubfolderSchema = new Schema<
   TDocumentSubfolder,
   DocumentSubfolderModel
 >({
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
   documentId: { type: Schema.Types.ObjectId, ref: 'Document', required: true },
   projectId: {
     type: Schema.Types.ObjectId,
