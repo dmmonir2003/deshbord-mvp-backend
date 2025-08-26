@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import { TSitePicture, SitePictureModel } from './SitePicture.interface';
 
 const SitePictureSchema = new Schema<TSitePicture, SitePictureModel>({
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
   projectId: {
     type: Schema.Types.ObjectId,
     ref: 'Project',

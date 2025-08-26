@@ -9,7 +9,7 @@ export type TSiteReport = {
   weather: string[];
   workingDays: string[];
   LaborTeam: string[];
-  sharedWith?: {
+  sharedWith?: { 
     userId: Types.ObjectId;
     role: 'client' | 'basicAdmin';
     sharedBy: Types.ObjectId;
