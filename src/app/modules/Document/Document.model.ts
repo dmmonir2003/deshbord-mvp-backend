@@ -3,7 +3,7 @@ import { TDocument, DocumentModel } from './Document.interface';
 
 const DocumentSchema = new Schema<TDocument, DocumentModel>(
   {
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true},
     projectId: {
       type: Schema.Types.ObjectId,
       ref: 'Project',

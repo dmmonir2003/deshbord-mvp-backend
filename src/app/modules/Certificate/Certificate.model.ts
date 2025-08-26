@@ -3,7 +3,7 @@ import { TCertificate, CertificateModel } from './Certificate.interface';
 
 const CertificateSchema = new Schema<TCertificate, CertificateModel>({
   file: { type: String, required: true },
-  title: { type: String, required: true , unique: true},
+  title: { type: String, required: true },
   projectId: {
     type: Schema.Types.ObjectId,
     ref: 'Project',

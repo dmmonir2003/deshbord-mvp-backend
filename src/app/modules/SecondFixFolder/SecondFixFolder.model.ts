@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
       import { TSecondFixFolder, SecondFixFolderModel } from './SecondFixFolder.interface';
       
       const SecondFixFolderSchema = new Schema<TSecondFixFolder, SecondFixFolderModel>(  {
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true},
     projectId: {
       type: Schema.Types.ObjectId,
       ref: 'Project',
