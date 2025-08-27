@@ -45,6 +45,8 @@ const updateSitePictureImage = catchAsync(async (req, res) => {
     const fileUrls = (req.files as Express.MulterS3.File[]).map(f => f.location); 
   const { id } = req.params;
   const SitePictureImage = req.body;
+console.log("SitePictureImage",SitePictureImage)
+
   const result = await SitePictureImageServices.updateSitePictureImageIntoDB(id, SitePictureImage, fileUrls);
 
   sendResponse(res, {

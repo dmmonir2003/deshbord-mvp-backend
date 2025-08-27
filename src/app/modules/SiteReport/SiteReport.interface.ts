@@ -2,6 +2,7 @@
 import { Model, Types } from 'mongoose';
 
 export type TSiteReport = {
+  title?: string;
   overviewText: string;
   overviewFile: string[];
   projectId: Types.ObjectId;

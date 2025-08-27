@@ -4,6 +4,7 @@ export const createSiteReportValidationSchema = z.object({
   body: z.object({
       projectId: z.string().min(1),
       overviewText: z.string(),
+      title: z.string().optional(),
   }),
 });
 
@@ -11,6 +12,7 @@ export const createSiteReportValidationSchema = z.object({
 export const updateSiteReportValidationSchema = z.object({
   body: z.object({
       projectId: z.string().optional(), 
+      title: z.string().optional(),
       overviewText: z.string().optional(), 
       overviewFile: z.array(z.string()).optional(), 
       date: z.string().optional(), 
