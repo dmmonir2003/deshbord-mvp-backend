@@ -52,6 +52,11 @@ const getSingleSitePictureImageFromDB = async (id: string) => {
 };
 
 const updateSitePictureImageIntoDB = async (id: string, payload: any, files?: any) => {
+ 
+    console.log("id",id)
+    console.log("payload",payload)
+    console.log("files",files)
+
   const isDeletedService = await mongoose.connection
     .collection('sitepictureimages')
     .findOne(
@@ -67,10 +72,13 @@ const updateSitePictureImageIntoDB = async (id: string, payload: any, files?: an
   }
 
 
-  if (files) {
+  if (files && files.length > 0) {
     payload.file = files; // Assuming file.location contains the S3 URL
   }
 
+  console.log("musaaaaaaaaa",payload)
+
+// return;
   const updatedData = await SitePictureImage.findByIdAndUpdate(
     { _id: id },
     payload,

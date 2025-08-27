@@ -133,7 +133,7 @@ const moduleRoutes = [
     route: SitePictureRoutes,
   },
   {
-    path: '/site-picture-Images',
+    path: '/site-picture-images',
     route: SitePictureImageRoutes,
   },
   {

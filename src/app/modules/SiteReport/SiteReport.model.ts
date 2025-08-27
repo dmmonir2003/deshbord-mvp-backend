@@ -4,6 +4,7 @@ import { TSiteReport, SiteReportModel } from './SiteReport.interface';
 const SiteReportSchema = new Schema<TSiteReport, SiteReportModel>({
   projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
   overviewText: { type: String, required: true },
+  title: { type: String},
   overviewFile: { type: [String], required: true },
   weather: { type: [String], required: true },
   workingDays: { type: [String], required: true },

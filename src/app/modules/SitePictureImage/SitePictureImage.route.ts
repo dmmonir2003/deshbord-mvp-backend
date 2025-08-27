@@ -34,7 +34,7 @@ router.get(
 
 router.patch(
   '/:id',
-     uploadFileS3(true).array('file', 5),
+  uploadFileS3(true).array('file', 5),
   //  uploadFileS3(true).single('file'),
    (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
