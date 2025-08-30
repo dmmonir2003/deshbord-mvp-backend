@@ -8,6 +8,7 @@ import { TProject } from './Project.interface';
 import { Project } from './Project.model';
 import { User } from '../User/user.model';
 import mongoose, { Types } from 'mongoose';
+import moment from 'moment';
 
 const createProjectIntoDB = async (
   payload: TProject,
@@ -177,6 +178,10 @@ const getSingleProjectFromDB = async (id: string) => {
 
 
 const updateProjectIntoDB = async (id: string, payload: any) => {
+  
+  if (payload.status === 'completed') {
+    payload.completedDate = new Date().toISOString();
+  }
 
   const isDeletedService = await mongoose.connection
     .collection('projects')
@@ -219,6 +224,86 @@ const deleteProjectFromDB = async (id: string) => {
   return deletedService;
 };
 
+
+// const getEarningForProjectsOfMonthFromDB = async (query: Record<string, unknown>, user?: any) => {
+
+//   console.log("Musaaaaaaaaaaaaaaaaa")
+//   console.log("query",query)
+
+//   const ProjectQuery = new QueryBuilder(
+//     Project.find(),
+//     query,
+//   )
+//     .search(PROJECT_SEARCHABLE_FIELDS)
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const result = await ProjectQuery.modelQuery;
+//   const meta = await ProjectQuery.countTotal();
+//   return {
+//     result,
+//     meta,
+//   };
+//   }
+const getEarningForProjectsOfMonthFromDB = async (query: Record<string, unknown>) => {
+  console.log("Musaaaaaaaaaaaaaaaaa");
+  console.log("query", query);
+
+  const currentMonth = moment(); // Get the current date
+  const monthsToInclude = parseInt(query.month as string) || 3; // Default to 3 if no month is provided
+  
+  // We're just interested in the months, not the overall range for all projects
+  const earningsByMonth = [];
+  let meta;
+  let totalEarnings = 0;
+
+  // Loop over the selected months (3, 6, or 12 months)
+  for (let i = 0; i < monthsToInclude; i++) {
+    const monthStart = currentMonth.clone().subtract(i, 'months').startOf('month'); // Start of the month
+    const monthEnd = monthStart.clone().endOf('month'); // End of the month
+
+    console.log(`Evaluating earnings for: ${monthStart.format('MMMM YYYY')}`);
+
+    // Filter for completed projects whose `completedDate` is within this month
+    const ProjectQuery = new QueryBuilder(
+      Project.find({
+        status: 'completed',
+        completedDate: { $gte: monthStart.toDate(), $lte: monthEnd.toDate() }, // Only completed projects within the month
+      }),
+      query,
+    )
+      .search(PROJECT_SEARCHABLE_FIELDS)
+      .filter()
+      .sort()
+      .paginate()
+      .fields();
+
+    const result = await ProjectQuery.modelQuery;
+      meta = await ProjectQuery.countTotal();
+    // Sum up the earnings for the filtered projects
+    const monthlyEarnings = result.reduce((sum, project) => sum + project.value, 0);
+    
+    earningsByMonth.push({
+      month: monthStart.format('MMMM YYYY'),
+      earnings: monthlyEarnings,
+    });
+
+    totalEarnings += monthlyEarnings;
+  }
+  // const result = await ProjectQuery.modelQuery;
+
+
+
+  return {
+    earningsByMonth,
+    totalEarnings,
+    meta,
+  };
+};
+
+
 export const ProjectServices = {
   createProjectIntoDB,
   getAllProjectsFromDB,
@@ -226,6 +311,7 @@ export const ProjectServices = {
   updateProjectIntoDB,
   deleteProjectFromDB,
   shareProjectIntoDB,
-  unShareProjectIntoDB
+  unShareProjectIntoDB,
+  getEarningForProjectsOfMonthFromDB
 
 };

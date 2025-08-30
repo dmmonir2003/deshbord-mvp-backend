@@ -63,6 +63,17 @@ const getAllProjects = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+const getEarningForProjectsOfMonth = catchAsync(async (req, res) => {
+  const result = await ProjectServices.getEarningForProjectsOfMonthFromDB(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Projects are retrieved successfully',
+    meta: result.meta,
+    data: { earningsByMonth: result.earningsByMonth, totalEarnings: result.totalEarnings },
+  });
+});
 
 const updateProject = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -96,5 +107,6 @@ export const ProjectControllers = {
   updateProject,
   deleteProject,
   shareProject,
-  unShareProject
+  unShareProject,
+  getEarningForProjectsOfMonth
 };

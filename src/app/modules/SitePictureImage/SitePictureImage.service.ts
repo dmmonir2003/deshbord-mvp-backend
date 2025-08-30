@@ -76,8 +76,6 @@ const updateSitePictureImageIntoDB = async (id: string, payload: any, files?: an
     payload.file = files; // Assuming file.location contains the S3 URL
   }
 
-  console.log("musaaaaaaaaa",payload)
-
 // return;
   const updatedData = await SitePictureImage.findByIdAndUpdate(
     { _id: id },

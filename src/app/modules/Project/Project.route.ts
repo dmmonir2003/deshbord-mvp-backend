@@ -25,7 +25,11 @@ router.post(
   validateRequest(createProjectValidationSchema),
   ProjectControllers.createProject,
 );
-
+router.get(
+  '/get-earning-of-month',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
+  ProjectControllers.getEarningForProjectsOfMonth,
+);
 router.post(
   '/:id/share',
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
@@ -71,5 +75,6 @@ router.get(
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
   ProjectControllers.getAllProjects,
 );
+
 
 export const ProjectRoutes = router;
