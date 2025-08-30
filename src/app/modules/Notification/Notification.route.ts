@@ -12,18 +12,18 @@ router.post(
 
 router.put(
   '/mark-all-as-read',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber ),
+  auth(USER_ROLE.superAdmin, ),
   NotificationControllers.markNotificationsAsRead,
 );
 router.patch(
   '/:id/read',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber ),
+  auth(USER_ROLE.superAdmin, ),
   NotificationControllers.markNotificationAsRead,
 );
 
 router.get(
   '/unread',
-  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.subscriber ),
+  auth(USER_ROLE.superAdmin, ),
   NotificationControllers.getAllUnreadNotifications,
 );
 

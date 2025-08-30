@@ -43,6 +43,9 @@ const getAllPaymentTrackersFromDB = async (query: Record<string, unknown>) => {
   };
 };
 const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown>, user?: any) => {
+
+  console.log('query', query);
+
      if(!query?.projectId) {
       throw new AppError(httpStatus.BAD_REQUEST, 'projectId is required');
      }
