@@ -14,6 +14,7 @@ const ProjectSchema = new Schema<TProject, ProjectModel>(
     type: { type: String, required: true },
     startDate: { type: String, required: true },
     endDate: { type: String, required: true },
+    completedDate: { type: String, default: '' },
     contractFile: { type: String },
     value: { type: Number, required: true },
     status: {

@@ -13,6 +13,7 @@ export type TProject = {
   type: string;
   startDate: string;
   endDate: string;
+  completedDate: string;
   contractFile?: string;
   status: 'pending' | 'ongoing' | 'completed' | 'cancelled';
   sharedWith?: {
