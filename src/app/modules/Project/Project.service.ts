@@ -251,7 +251,9 @@ const getEarningForProjectsOfMonthFromDB = async (query: Record<string, unknown>
   console.log("Musaaaaaaaaaaaaaaaaa");
   console.log("query", query);
 
-  const currentMonth = moment(); // Get the current date
+  // const currentMonth = moment(); // Get the current date
+  const currentMonth = moment.utc(); // use UTC to match Mongo
+
   const monthsToInclude = parseInt(query.month as string) || 3; // Default to 3 if no month is provided
   
   // We're just interested in the months, not the overall range for all projects
@@ -261,46 +263,77 @@ const getEarningForProjectsOfMonthFromDB = async (query: Record<string, unknown>
 
   // Loop over the selected months (3, 6, or 12 months)
   for (let i = 0; i < monthsToInclude; i++) {
-    const monthStart = currentMonth.clone().subtract(i, 'months').startOf('month'); // Start of the month
-    const monthEnd = monthStart.clone().endOf('month'); // End of the month
+    // const monthStart = currentMonth.clone().subtract(i, 'months').startOf('month'); // Start of the month
+    // const monthEnd = monthStart.clone().endOf('month'); // End of the month
+    const monthStart = currentMonth.clone().subtract(i, 'months').startOf('month').toDate();
+const monthEnd = currentMonth.clone().subtract(i, 'months').endOf('month').toDate();
 
-    console.log(`Evaluating earnings for: ${monthStart.format('MMMM YYYY')}`);
 
-    // Filter for completed projects whose `completedDate` is within this month
-    const ProjectQuery = new QueryBuilder(
-      Project.find({
-        status: 'completed',
-        completedDate: { $gte: monthStart.toDate(), $lte: monthEnd.toDate() }, // Only completed projects within the month
-      }),
-      query,
-    )
-      .search(PROJECT_SEARCHABLE_FIELDS)
-      .filter()
-      .sort()
-      .paginate()
-      .fields();
+   console.log("tesssssssssss",{
+  month: monthStart,
+  monthStart: monthStart.toISOString(),
+  monthEnd: monthEnd.toISOString()
+});
 
-    const result = await ProjectQuery.modelQuery;
-      meta = await ProjectQuery.countTotal();
-    // Sum up the earnings for the filtered projects
-    const monthlyEarnings = result.reduce((sum, project) => sum + project.value, 0);
-    
+
+
+    // ✅ Try raw query first (remove QueryBuilder for testing)
+    const result = await Project.find({
+      status: 'completed',
+      completedDate: { $gte: monthStart, $lte: monthEnd }
+    });
+
+ const monthlyEarnings = result.reduce((sum, project) => sum + project.value, 0);
+
+
+
     earningsByMonth.push({
-      month: monthStart.format('MMMM YYYY'),
+      month: moment.utc(monthStart).format('MMMM YYYY'),
       earnings: monthlyEarnings,
     });
 
-    totalEarnings += monthlyEarnings;
+ totalEarnings += monthlyEarnings;
+
+    // Filter for completed projects whose `completedDate` is within this month
+    // const ProjectQuery = new QueryBuilder(
+    //   Project.find({
+    //     status: 'completed',
+    //     completedDate: { $gte: monthStart.toDate(), $lte: monthEnd.toDate() }, // Only completed projects within the month
+    //   }),
+    //   query,
+    // )
+    //   .search(PROJECT_SEARCHABLE_FIELDS)
+    //   .filter()
+    //   .sort()
+    //   .paginate()
+    //   .fields();
+
+    // const result = await ProjectQuery.modelQuery;
+    //   meta = await ProjectQuery.countTotal();
+    // // Sum up the earnings for the filtered projects
+    // const monthlyEarnings = result.reduce((sum, project) => sum + project.value, 0);
+    
+    // earningsByMonth.push({
+    //   month: monthStart.format('MMMM YYYY'),
+    //   earnings: monthlyEarnings,
+    // });
+
+    // totalEarnings += monthlyEarnings;
   }
   // const result = await ProjectQuery.modelQuery;
 
 
 
   return {
-    earningsByMonth,
+earningsByMonth,
     totalEarnings,
     meta,
   };
+  // return {
+  //   earningsByMonth,
+  //   totalEarnings,
+  //   meta,
+  // };
 };
 
 
