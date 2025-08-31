@@ -19,10 +19,14 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     # Step 3: Create the .env file
+    # - name: Create .env file
+    #   run: |
+    #    echo "${{ secrets.ENV_VARS }}" > .env
+    #    cat .env  # Debugging only, remove for production
     - name: Create .env file
       run: |
-       echo "${{ secrets.ENV_VARS }}" > .env
-       cat .env  # Debugging only, remove for production
+        printf "%s\n" "${{ secrets.ENV_VARS }}" > .env
+        cat .env  # Debugging only, remove for production
 
     # Step 4: Build and Test with Docker Compose
     - name: Build and Test Docker Compose
