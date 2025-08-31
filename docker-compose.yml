@@ -6,10 +6,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5001:5001" # Match the PORT from your .env file
-    volumes:
+      - "5000:5000" # Match the PORT from your .env file
+    volumes:        # For hot-reloading during development(optional, not need in production)
       - .:/app
       - /app/node_modules
     env_file:
       - .env # Specify your .env file
-    command: npm run start:dev # Or your relevant start script
+    # command: npm run start:dev # Or your relevant start script
+    command: npm run start:prod # Or your relevant start script
+    restart: always
