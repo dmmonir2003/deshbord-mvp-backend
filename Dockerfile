@@ -6,7 +6,7 @@ COPY package.json  ./
 COPY package-lock.json ./
 
 # RUN yarn cache clean
-RUN npm cache clean --force
+# RUN npm cache clean --force
 
 # RUN yarn install --frozen-lockfile
 # RUN npm install --production

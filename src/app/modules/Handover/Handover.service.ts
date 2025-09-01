@@ -110,7 +110,10 @@ const getAllHandoversFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleHandoverFromDB = async (id: string) => {
-  const result = await Handover.findById(id);
+  const result = await Handover.findById(id).populate({
+      path: "sharedWith.userId",
+      select: "name profileImg role" // only fetch name and image
+    });
 
   return result;
 };
