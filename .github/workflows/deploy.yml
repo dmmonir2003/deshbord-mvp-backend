@@ -68,7 +68,12 @@ jobs:
         sudo mkdir -p /var/www/project-management-backend
         sudo chown -R ubuntu:ubuntu /var/www/project-management-backend
         sudo chmod -R 755 /var/www/project-management-backend
+        # EOF
+
+        # Create .env file on EC2
+        echo "${{ secrets.ENV_VARS }}" > /var/www/project-management-backend/.env
         EOF
+
     
     # Step 5: Copy Files to EC2
     - name: Copy Files to EC2
