@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:5000" # Match the PORT from your .env file
+      - "5001:5001" # Match the PORT from your .env file
     volumes:        # For hot-reloading during development(optional, not need in production)
       - .:/app
       - /app/node_modules
