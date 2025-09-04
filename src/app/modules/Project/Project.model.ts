@@ -7,8 +7,8 @@ const ProjectSchema = new Schema<TProject, ProjectModel>(
     clientName: { type: String },
     clientEmail: { type: String },
     clientId: { type: Schema.Types.ObjectId, ref: 'User' }, // Adjust 'Client' to your actual model name
-    description: { type: String, required: true },
-    reference: { type: String, required: true },
+    description: { type: String },
+    reference: { type: String},
     address: { type: String, required: true },
     contact: { type: String, required: true },
     type: { type: String, required: true },
