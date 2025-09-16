@@ -48,6 +48,17 @@ router.get(
 router.patch(
   '/:id',
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client),
+   uploadFileS3(true).single('file'),
+   (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.data) {
+      try {
+        req.body = JSON.parse(req.body.data);
+      } catch (error) {
+        next(error);
+      }
+    }
+    next();
+  },
   validateRequest(updateNoteValidationSchema),
   NoteControllers.updateNote,
 );

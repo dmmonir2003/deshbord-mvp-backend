@@ -3,7 +3,7 @@ import { Model, Types } from 'mongoose';
 
 export type TTimeSchedule = {
   title: string;
-  file: string;
+  file?: string;
   startDate: Date;
   endDate: Date;
   description: string;

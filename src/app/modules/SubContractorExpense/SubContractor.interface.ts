@@ -8,6 +8,7 @@ export type TSubContractor = {
     projectId: Types.ObjectId;
     vat?: number;
     ratePerDay: number;
+    totalCost: number;
     amount: number;
     file?: string;
     subContractorId?: Types.ObjectId;

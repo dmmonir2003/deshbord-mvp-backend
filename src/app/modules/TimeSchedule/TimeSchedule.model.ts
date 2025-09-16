@@ -3,7 +3,7 @@ import { TTimeSchedule, TimeScheduleModel } from './TimeSchedule.interface';
 
 const TimeScheduleSchema = new Schema<TTimeSchedule, TimeScheduleModel>({
   title: { type: String, required: true },
-  file: { type: String, required: true },
+  file: { type: String },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   description: { type: String },

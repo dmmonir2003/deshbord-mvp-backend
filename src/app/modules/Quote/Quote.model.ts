@@ -3,7 +3,7 @@ import { TQuote, QuoteModel } from './Quote.interface';
 
 const QuoteSchema = new Schema<TQuote, QuoteModel>({
   title: { type: String, required: true },
-  file: { type: String, required: true },
+  file: { type: String },
   projectId: {
     type: Schema.Types.ObjectId,
     ref: 'Project',

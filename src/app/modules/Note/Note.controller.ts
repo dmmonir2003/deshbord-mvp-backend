@@ -71,7 +71,7 @@ const getAllNotes = catchAsync(async (req, res) => {
 const updateNote = catchAsync(async (req, res) => {
   const { id } = req.params;
   const Note = req.body;
-  const result = await NoteServices.updateNoteIntoDB(id, Note, req.user);
+  const result = await NoteServices.updateNoteIntoDB(id, Note, req.user, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

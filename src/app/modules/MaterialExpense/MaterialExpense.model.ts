@@ -17,7 +17,7 @@ const MaterialExpenseSchema = new Schema<
     ref: 'Project',
   },
   unitPrice: { type: Number, default: 0 },
-  unit: { type: String, default: 0 },
+  // unit: { type: String, default: 0 },
   amount: { type: Number, required: true },
   file: { type: String },
   materialId: { type: Schema.Types.ObjectId, ref: 'Labour'},

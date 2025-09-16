@@ -2,12 +2,12 @@
 import { Model, Types } from 'mongoose';
 
 export type TSecondFixFile = {
-    file: string;
-    room: string;
-    surface: string;
-    productCode: string;
-    suplierName: string;
-    text: string;
+    file?: string;
+    room?: string;
+    surface?: string;
+    productCode?: string;
+    suplierName?: string;
+    text?: string;
     title: string;
     secondFixSubFolder: Types.ObjectId;
     projectId: Types.ObjectId;

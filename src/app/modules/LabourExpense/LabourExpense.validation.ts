@@ -6,7 +6,7 @@ export const createLabourExpenseValidationSchema = z.object({
     name: z.string({ required_error: 'Name is required' }),
     projectId: z.string({ required_error: 'projectId is required' }),
     days: z.number({ required_error: 'Days is required' }),
-    vat: z.number().optional(),
+    // vat: z.number().optional(),
 
     amount: z.number().optional(),
     file: z.string().optional(),
@@ -25,7 +25,7 @@ export const updateLabourExpenseValidationSchema = z.object({
     name: z.string({ required_error: 'Name is required' }).optional(),
     projectId: z.string({ required_error: 'projectId is required' }).optional(),
     days: z.number({ required_error: 'Days is required' }).optional(),
-    vat: z.number().optional(),
+    // vat: z.number().optional(),
     amount: z.number({ required_error: 'Amount is required' }).optional(),
     file: z.string().optional(),
     labourId: z

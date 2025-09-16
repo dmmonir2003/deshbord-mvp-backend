@@ -9,7 +9,7 @@ const LabourExpenseSchema = new Schema<TLabourExpense, LabourExpenseModel>({
     type: Schema.Types.ObjectId,
     ref: 'Project',
   },
-  vat: { type: Number, default: 0 },
+  // vat: { type: Number, default: 0 },
   amount: { type: Number, required: true },
   file: { type: String },
   labourId: { type: Schema.Types.ObjectId, ref: 'Labour', required: true },
