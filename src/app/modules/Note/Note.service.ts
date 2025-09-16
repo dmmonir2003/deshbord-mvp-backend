@@ -327,9 +327,7 @@ const isDeletedService = await mongoose.connection
   }
 
   return updatedData;
-}
-
-  
+}  
 };
 
 const deleteNoteFromDB = async (id: string) => {

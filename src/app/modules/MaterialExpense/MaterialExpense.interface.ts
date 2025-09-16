@@ -6,7 +6,7 @@ export type TMaterialExpense = {
     name: string;
     projectId: Types.ObjectId;
     quantity?: number;
-    unit?: number;
+    // unit?: number;
     unitPrice?: number;
     vat?: number;
     amount: number;

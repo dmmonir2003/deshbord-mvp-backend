@@ -24,7 +24,6 @@ const createMaterialExpenseIntoDB = async (
     payload.amount = baseAmount + vatAmount;
   }
 
-console.log('payload', payload);
 
   const result = await MaterialExpense.create(payload);
   

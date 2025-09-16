@@ -5,7 +5,7 @@ export type TQuote = {
   title: string;
   projectId: Types.ObjectId;
   noteId?: Types.ObjectId;
-  file: string;
+  file?: string;
   value: number;
   sharedWith?: {
     userId: Types.ObjectId;

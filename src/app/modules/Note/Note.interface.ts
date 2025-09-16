@@ -5,7 +5,7 @@ export type TNote = {
   projectId: Types.ObjectId;
   clientId: Types.ObjectId;
   title: string;
-  file: string;
+  file?: string;
   description?: string;
   date: string;
   value: number;

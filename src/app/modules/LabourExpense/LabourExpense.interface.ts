@@ -7,7 +7,7 @@ export type TLabourExpense = {
   name: string;
   projectId: Types.ObjectId;
   days: number;
-  vat?: number;
+  // vat?: number;
   amount: number;
   file?: string;
   labourId: Types.ObjectId;

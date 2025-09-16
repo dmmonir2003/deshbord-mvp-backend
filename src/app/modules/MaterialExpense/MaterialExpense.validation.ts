@@ -10,7 +10,7 @@ export const createMaterialExpenseValidationSchema = z.object({
     unitPrice: z.number({ required_error: 'unitPrice is required' }),
     vat: z.number().optional(),
     amount: z.number().optional(),
-    unit: z.string().optional(),
+    // unit: z.string().optional(),
     file: z.string().optional(),
     materialId: z
       .string({ required_error: 'Labour ID is required' })
@@ -30,7 +30,7 @@ export const updateMaterialExpenseValidationSchema = z.object({
     projectId: z.string({ required_error: 'projectId is required' }).optional(),
     vat: z.number().optional(),
     amount: z.number().optional(),
-    unit: z.string().optional(),
+    // unit: z.string().optional(),
     file: z.string().optional(),
     materialId: z
       .string({ required_error: 'Labour ID is required' })
