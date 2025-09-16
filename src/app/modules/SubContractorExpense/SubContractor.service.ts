@@ -142,7 +142,7 @@ if(file) {
   }
 
   const isDeletedService = await mongoose.connection
-    .collection('subcontractors')
+    .collection('SubContractorExpense')
     .findOne(
       { _id: new mongoose.Types.ObjectId(id) }
     );

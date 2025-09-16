@@ -3,12 +3,12 @@ import { TSecondFixFile, SecondFixFileModel } from './SecondFixFile.interface';
 
 const SecondFixFileSchema = new Schema<TSecondFixFile, SecondFixFileModel>(
   {
-    file: { type: String, required: true },
-    room: { type: String, required: true },
-    surface: { type: String, required: true },
-    productCode: { type: String, required: true },
-    suplierName: { type: String, required: true },
-    text: { type: String, required: true },
+    file: { type: String},
+    room: { type: String },
+    surface: { type: String },
+    productCode: { type: String },
+    suplierName: { type: String },
+    text: { type: String },
     title: { type: String, required: true },
     secondFixSubFolder: {
       type: Schema.Types.ObjectId,

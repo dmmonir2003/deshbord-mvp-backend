@@ -196,8 +196,13 @@ const getSingleNoteFromDB = async (id: string) => {
 };
 
 
-const updateNoteIntoDB = async (id: string, payload: any, user: any) => {
-if(payload.status){
+const updateNoteIntoDB = async (id: string, payload: any, user: any, file?: any) => {
+
+
+
+if(payload.status === 'approved' || payload.status === 'rejected') {
+  payload.approvedDate = new Date().toISOString();
+
 
   const note = await mongoose.connection
     .collection('notes')
@@ -298,6 +303,11 @@ if(payload.status){
 
 
 }else{
+ 
+  if(file){
+    payload.file = file.location as string;
+  }
+
 
  console.log('payload.status Not found');
 
