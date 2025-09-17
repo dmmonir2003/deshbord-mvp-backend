@@ -77,6 +77,17 @@ const getAllQuotes = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+const getAllQuotesValue = catchAsync(async (req, res) => {
+  const result = await QuoteServices.getAllQuotesValueFromDB(req.query, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Quotes are retrieved successfully',
+    meta: result.meta,
+    data: {totalValue:result.totalValue},
+  });
+});
 
 const updateQuote = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -111,5 +122,6 @@ export const QuoteControllers = {
   deleteQuote,
   shareQuote,
   unShareQuote, 
-  lastQuote
+  lastQuote,
+  getAllQuotesValue
 };

@@ -26,6 +26,11 @@ router.post(
   QuoteControllers.createQuote,
 );
 
+router.get(
+  '/get-all-quote-value',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
+  QuoteControllers.getAllQuotesValue,
+);
 
 router.get(
   '/:id/last-quote',
@@ -80,5 +85,6 @@ router.get(
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
   QuoteControllers.getAllQuotes,
 );
+
 
 export const QuoteRoutes = router;
