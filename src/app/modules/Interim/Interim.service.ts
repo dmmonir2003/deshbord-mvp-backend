@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TInterim } from './Interim.interface';
 import { Interim } from './Interim.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createInterimIntoDB = async (
   payload: TInterim,
@@ -21,6 +22,17 @@ const createInterimIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Interim');
   }
+
+  const ndata = {
+    title: 'Interim Creation',
+    message: "A Interim created",
+    projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Interim');
 
   return result;
 };

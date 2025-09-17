@@ -6,6 +6,7 @@ import { DOCUMENT_SEARCHABLE_FIELDS } from './Document.constant';
 import mongoose from 'mongoose';
 import { TDocument } from './Document.interface';
 import { Document } from './Document.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createDocumentIntoDB = async (
   payload: TDocument,
@@ -16,6 +17,8 @@ const createDocumentIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Document');
   }
+
+
 
   return result;
 };

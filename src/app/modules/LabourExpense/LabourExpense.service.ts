@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import { TLabourExpense } from './LabourExpense.interface';
 import { LabourExpense } from './LabourExpense.model';
 import { Labour } from '../Labour/Labour.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createLabourExpenseIntoDB = async (
   payload: TLabourExpense,
@@ -30,6 +31,17 @@ payload.amount = payload.days * labour?.dayRate;
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create LabourExpense');
   }
+
+    const ndata = {
+    title: 'Labour Expense Creation',
+    message: "A Labour Expense created",
+    projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Labour Expense');
 
   return result;
 };

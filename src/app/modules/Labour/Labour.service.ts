@@ -6,6 +6,7 @@ import { LABOUR_SEARCHABLE_FIELDS } from './Labour.constant';
 import mongoose from 'mongoose';
 import { TLabour } from './Labour.interface';
 import { Labour } from './Labour.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createLabourIntoDB = async (
   payload: TLabour,
@@ -22,6 +23,17 @@ const createLabourIntoDB = async (
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Labour');
   }
 
+ 
+    const ndata = {
+    title: 'Labour Creation',
+    message: "A Labour created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Labour');
   return result;
 };
 

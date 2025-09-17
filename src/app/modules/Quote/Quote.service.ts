@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TQuote } from './Quote.interface';
 import { Quote } from './Quote.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createQuoteIntoDB = async (
   payload: TQuote,
@@ -22,6 +23,17 @@ const createQuoteIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Quote');
   }
+
+        const ndata = {
+      title: 'Quote Creation',
+      message: "A Quote created",
+      // projectId:payload?.projectId,
+      readBy: []
+    }
+  
+    const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+    
+    if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return result;
 };

@@ -2,20 +2,15 @@ import { Schema, model } from 'mongoose';
 import { TNotification, NotificationModel } from './Notification.interface';
 
 const NotificationSchema = new Schema<TNotification, NotificationModel>({
-  type: { type: String, enum: ['quote', 'callBooking'], required: true },
+  // type: { type: String, enum: ['quote', 'callBooking'], required: true },
+  title: { type: String, required: true },
   message: { type: String, required: true },
-//  readBy: [
-//     {
-//         type: Schema.Types.ObjectId,
-//         ref: 'User',
-//         default: [],
-//     },
-//   ],
  readBy: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
-  subscriberId: {
+ userFor: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+  projectId: {
     type: Schema.Types.ObjectId,
-    required: [true, 'User id is required'],
-    ref: 'User',
+    // required: [true, 'Project id is required'],
+    ref: 'Project',
   },
 }, { timestamps: true });
 

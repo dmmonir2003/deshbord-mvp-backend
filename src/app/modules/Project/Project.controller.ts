@@ -63,6 +63,17 @@ const getAllProjects = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+const getAllProjectsWithoutPending = catchAsync(async (req, res) => {
+  const result = await ProjectServices.getAllProjectsWithoutPendingFromDB(req.query, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Projects are retrieved successfully',
+    meta: result.meta,
+    data: result.result,
+  });
+});
 const getEarningForProjectsOfMonth = catchAsync(async (req, res) => {
   const result = await ProjectServices.getEarningForProjectsOfMonthFromDB(req.query);
 
@@ -108,5 +119,6 @@ export const ProjectControllers = {
   deleteProject,
   shareProject,
   unShareProject,
-  getEarningForProjectsOfMonth
+  getEarningForProjectsOfMonth,
+  getAllProjectsWithoutPending
 };
