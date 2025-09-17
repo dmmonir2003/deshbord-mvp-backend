@@ -57,7 +57,6 @@ const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown
      }
     
 
-
       const lastQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
       const allInterims = await InterimServices.getAllInterimsFromDB(query, user);
       const totalInterimValue = allInterims.result.map((interim:any) => interim.value).reduce((acc, interim) => acc + interim, 0);
