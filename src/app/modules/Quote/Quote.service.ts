@@ -227,6 +227,87 @@ const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) =>
   //   meta,
   // };
 };
+const getAllQuotesValueFromDB = async (query: Record<string, unknown>, user?: any) => {
+
+  console.log('user',user);
+
+//  if( user?.role === 'superAdmin' || user?.role === 'primeAdmin'  ) {
+//   const { userEmail } = user;
+//   const userId = await User.isUserExistsByCustomEmail(userEmail).then(
+//     (user: any) => user?._id
+//   );
+
+//   if (!userId) {
+//     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+//   }  
+
+//      const ProjectQuery = new QueryBuilder(
+//     Quote.find({
+//         sharedWith: {
+//           $elemMatch: {
+//             userId: new Types.ObjectId(userId),
+//             role: user?.role
+//           }
+//         }
+//       }),
+//     query,
+//   )
+//     .search(QUOTE_SEARCHABLE_FIELDS)
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const result = await ProjectQuery.modelQuery;
+  
+//   console.log("test ", result)
+
+//   const meta = await ProjectQuery.countTotal();
+//   return {
+//     result,
+//     meta,
+//   };
+  
+//   }else{
+//   const ProjectQuery = new QueryBuilder(
+//     Quote.find(),
+//     query,
+//   )
+//     .search(QUOTE_SEARCHABLE_FIELDS)
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const result = await ProjectQuery.modelQuery;
+//   const meta = await ProjectQuery.countTotal();
+//   return {
+//     result,
+//     meta,
+//   };
+//   }
+
+  const QuoteQuery = new QueryBuilder(
+    Quote.find(),
+    query,
+  )
+    .search(QUOTE_SEARCHABLE_FIELDS)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await QuoteQuery.modelQuery;
+
+    const totalValue = result.reduce((sum, quote) => sum + quote.value, 0);
+
+  const meta = await QuoteQuery.countTotal();
+   console.log("testing",totalValue)
+  return {
+    totalValue,
+    meta,
+  };
+};
 
 const getSingleQuoteFromDB = async (id: string) => {
   const result = await Quote.findById(id).populate({
@@ -293,6 +374,7 @@ export const QuoteServices = {
   deleteQuoteFromDB,
   shareQuoteIntoDB,
   unShareQuoteIntoDB,
-  lastQuoteIntoDB
+  lastQuoteIntoDB,
+  getAllQuotesValueFromDB
 };
 
