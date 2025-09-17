@@ -7,7 +7,7 @@ export type TNotification = {
   message: string;
   userFor?: Types.ObjectId[];
   readBy: Types.ObjectId[];
-  projectId: Types.ObjectId;
+  projectId?: Types.ObjectId;
 };
 
 export interface NotificationModel extends Model<TNotification> {

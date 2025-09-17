@@ -6,6 +6,7 @@ import { MATERIALEXPENSE_SEARCHABLE_FIELDS } from './MaterialExpense.constant';
 import mongoose from 'mongoose';
 import { TMaterialExpense } from './MaterialExpense.interface';
 import { MaterialExpense } from './MaterialExpense.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createMaterialExpenseIntoDB = async (
   payload: TMaterialExpense,
@@ -31,6 +32,17 @@ const createMaterialExpenseIntoDB = async (
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create MaterialExpense');
   }
 
+  const ndata = {
+    title: 'Material Expense Creation',
+    message: "A Material Expense created",
+    projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Material Expense');
+  
   return result;
 };
 

@@ -6,6 +6,7 @@ import { SUBCONTRACTOR_SEARCHABLE_FIELDS } from './SubContractor.constant';
 import mongoose from 'mongoose';
 import { TSubContractor } from './SubContractor.interface';
 import { SubContractor } from './SubContractor.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createSubContractorIntoDB = async (
   payload: TSubContractor,
@@ -27,6 +28,19 @@ if (payload.days && payload.ratePerDay) {
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create SubContractor');
   }
+
+
+    const ndata = {
+      title: 'Sub Contractor Expense Creation',
+      message: "A Sub Contractor Expense created",
+      projectId:payload?.projectId,
+      readBy: []
+    }
+  
+    const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+    
+    if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Sub Contractor Expense');
+
 
   return result;
 };

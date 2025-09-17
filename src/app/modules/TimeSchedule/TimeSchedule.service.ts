@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TTimeSchedule } from './TimeSchedule.interface';
 import { TimeSchedule } from './TimeSchedule.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createTimeScheduleIntoDB = async (
   payload: TTimeSchedule,
@@ -20,6 +21,17 @@ const createTimeScheduleIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create TimeSchedule');
   }
+
+       const ndata = {
+    title: 'TimeSchedule Creation',
+    message: "A TimeSchedule File created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return result;
 };

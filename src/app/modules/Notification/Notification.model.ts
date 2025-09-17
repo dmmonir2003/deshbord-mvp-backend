@@ -9,7 +9,7 @@ const NotificationSchema = new Schema<TNotification, NotificationModel>({
  userFor: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
   projectId: {
     type: Schema.Types.ObjectId,
-    required: [true, 'Project id is required'],
+    // required: [true, 'Project id is required'],
     ref: 'Project',
   },
 }, { timestamps: true });

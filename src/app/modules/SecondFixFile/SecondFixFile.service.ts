@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TSecondFixFile } from './SecondFixFile.interface';
 import { SecondFixFile } from './SecondFixFile.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createSecondFixFileIntoDB = async (
   payload: TSecondFixFile,
@@ -26,6 +27,18 @@ const createSecondFixFileIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create SecondFixFile');
   }
+
+  
+      const ndata = {
+    title: 'SecondFix File Creation',
+    message: "A SecondFix File created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return result;
 };

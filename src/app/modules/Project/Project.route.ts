@@ -40,7 +40,11 @@ router.post(
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   ProjectControllers.unShareProject
 );
-
+router.get(
+  '/completed-ongoing',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
+  ProjectControllers.getAllProjectsWithoutPending,
+);
 router.get(
   '/:id',
   ProjectControllers.getSingleProject,
@@ -75,6 +79,7 @@ router.get(
   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client, USER_ROLE.basicAdmin),
   ProjectControllers.getAllProjects,
 );
+
 
 
 export const ProjectRoutes = router;

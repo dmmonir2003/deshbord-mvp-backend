@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TSnagging } from './Snagging.interface';
 import { Snagging } from './Snagging.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createSnaggingIntoDB = async (
   payload: TSnagging,
@@ -33,6 +34,17 @@ console.log("payload", payload);
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Snagging');
   }
 
+       const ndata = {
+    title: 'Snagging Creation',
+    message: "A Snagging File created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
+  
   return result;
 };
 

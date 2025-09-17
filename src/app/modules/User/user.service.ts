@@ -10,9 +10,10 @@ import { usersSearchableFields } from './user.constant';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import { NotificationServices } from '../Notification/Notification.service';
 
 export const createUserIntoDB = async (payload: TUser, file?: any) => {
-  console.log('musa testing',payload);
+
 
   if (file) {
     payload.profileImg = file.location as string;
@@ -20,6 +21,18 @@ export const createUserIntoDB = async (payload: TUser, file?: any) => {
 
   const newUser = await User.create(payload);
   if (!newUser) throw new Error('Failed to create user');
+
+
+  const ndata = {
+    title: 'User Creation',
+    message: "A User created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return newUser;
 };
