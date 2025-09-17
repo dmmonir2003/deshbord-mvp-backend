@@ -51,7 +51,7 @@ const shareNoteIntoDB = async (
     role: entry.role,
     sharedBy: new Types.ObjectId(sharedBy),
   }));
-
+ 
   const project = await Note.findByIdAndUpdate(
     projectId,
     { $addToSet: { sharedWith: { $each: sharedEntries } } },
@@ -196,10 +196,150 @@ const getSingleNoteFromDB = async (id: string) => {
 };
 
 
+// const updateNoteIntoDB = async (id: string, payload: any, user: any, file?: any) => {
+
+
+
+// if(payload.status === 'approved' || payload.status === 'rejected') {
+//   payload.approvedDate = new Date().toISOString();
+
+
+//   const note = await mongoose.connection
+//     .collection('notes')
+//     .findOne(
+//       { _id: new mongoose.Types.ObjectId(id) },
+
+//     );
+
+//   if (!note) {
+//     throw new Error('Note not found');
+//   }
+
+//   if (note.isDeleted) {
+//     throw new Error('Cannot update a deleted Note');
+//   }
+
+//   const updatedNote = await Note.findByIdAndUpdate(
+//     { _id: id },
+//     payload,
+//     { new: true, runValidators: true },
+//   );
+
+//   if (!updatedNote) {
+//     throw new Error('Note not found after update');
+//   }
+
+//    console.log('updated Note',updatedNote);
+
+//    if( updatedNote.status === 'approved' ) {
+//       // get last quote from db
+//   const projectId = updatedNote.projectId;
+//   const userId = await User.isUserExistsByCustomEmail(user.userEmail)
+//   .then(
+//     (user: any) => {
+//       // console.log('user',user);
+//       return user?._id
+//     } 
+//   )
+
+
+//   // const userId = updatedData.userId; 
+//   const lastQuote = await Quote.findOne({
+//     projectId,                 // filter by project
+//     // isDeleted: false,          // not deleted
+//     "sharedWith.userId": userId // user has access
+//   })
+//     .sort({ createdAt: -1 }) // latest first
+//     // .populate({
+//     //   path: "sharedWith.userId",
+//     //   select: "name image"
+//     // })
+//     // .populate({
+//     //   path: "sharedWith.sharedBy",
+//     //   select: "name image"
+//     // });
+
+
+//     const newValue = updatedNote.value+(lastQuote?.value as any);
+//     // console.log('newValue',newValue);
+//     const newQuoteData =  {
+//       projectId: lastQuote?.projectId,
+//       title: lastQuote?.title,
+//       file: lastQuote?.file,
+//       noteId: updatedNote?._id,
+//       value: newValue,
+//       sharedWith: lastQuote?.sharedWith
+//     }
+
+//   // console.log('newQuoteData',newQuoteData);
+
+//     const newQuote = await Quote.create(newQuoteData);
+//     if (!newQuote) {
+//       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Quote');
+//     }
+// // result++++++++++ {
+// //   _id: new ObjectId('68996f4de71cc31474d92095'),
+// //   title: 'Architect',
+// //   file: 'https://pro-bucket.s3.us-east-1.amazonaws.com/1754885962356_1.png',
+// //   projectId: new ObjectId('688e16d11287a3a4dc3a9b83'),
+// //   value: 450000,
+// //   isDeleted: false,
+// //   sharedWith: [
+// //     {
+// //       userId: new ObjectId('68996262d2544a0c0ed42616'),
+// //       role: 'client',
+// //       sharedBy: new ObjectId('688e22868f082a1b763c2007'),
+// //       _id: new ObjectId('68996fcde71cc31474d920b4')
+// //     }
+// //   ],
+// //   __v: 0
+// // }
+
+//       return;
+//       // return newQuote;
+//    }
+
+ 
+
+
+// }else{
+ 
+//   if(file){
+//     payload.file = file.location as string;
+//   }
+
+
+//  console.log('payload.status Not found');
+
+// const isDeletedService = await mongoose.connection
+//     .collection('notes')
+//     .findOne(
+//       { _id: new mongoose.Types.ObjectId(id) },
+
+//     );
+
+//   if (!isDeletedService) {
+//     throw new Error('Note not found');
+//   }
+
+//   if (isDeletedService.isDeleted) {
+//     throw new Error('Cannot update a deleted Note');
+//   }
+
+//   const updatedData = await Note.findByIdAndUpdate(
+//     { _id: id },
+//     payload,
+//     { new: true, runValidators: true },
+//   );
+
+//   if (!updatedData) {
+//     throw new Error('Note not found after update');
+//   }
+
+//   return updatedData;
+// }  
+// };
 const updateNoteIntoDB = async (id: string, payload: any, user: any, file?: any) => {
-
-
-
 if(payload.status === 'approved' || payload.status === 'rejected') {
   payload.approvedDate = new Date().toISOString();
 
@@ -233,42 +373,32 @@ if(payload.status === 'approved' || payload.status === 'rejected') {
 
    if( updatedNote.status === 'approved' ) {
       // get last quote from db
-  const projectId = updatedNote.projectId;
-  const userId = await User.isUserExistsByCustomEmail(user.userEmail)
-  .then(
-    (user: any) => {
-      // console.log('user',user);
-      return user?._id
-    } 
-  )
+  // const projectId = updatedNote.projectId;
+  // const userId = await User.isUserExistsByCustomEmail(user.userEmail)
+  // .then(
+  //   (user: any) => {
+  //     // console.log('user',user);
+  //     return user?._id
+  //   } 
+  // )
 
 
-  // const userId = updatedData.userId; 
-  const lastQuote = await Quote.findOne({
-    projectId,                 // filter by project
-    // isDeleted: false,          // not deleted
-    "sharedWith.userId": userId // user has access
-  })
-    .sort({ createdAt: -1 }) // latest first
-    // .populate({
-    //   path: "sharedWith.userId",
-    //   select: "name image"
-    // })
-    // .populate({
-    //   path: "sharedWith.sharedBy",
-    //   select: "name image"
-    // });
+  // // const userId = updatedData.userId; 
+  // const lastQuote = await Quote.findOne({
+  //   projectId,                 // filter by project
+  //   // isDeleted: false,          // not deleted
+  //   "sharedWith.userId": userId // user has access
+  // })
+  //   .sort({ createdAt: -1 }) // latest first
 
 
-    const newValue = updatedNote.value+(lastQuote?.value as any);
-    // console.log('newValue',newValue);
     const newQuoteData =  {
-      projectId: lastQuote?.projectId,
-      title: lastQuote?.title,
-      file: lastQuote?.file,
+      projectId: updatedNote?.projectId,
+      title: updatedNote?.title,
+      file: updatedNote?.file,
       noteId: updatedNote?._id,
-      value: newValue,
-      sharedWith: lastQuote?.sharedWith
+      value: updatedNote.value,
+      sharedWith: updatedNote?.sharedWith
     }
 
   // console.log('newQuoteData',newQuoteData);

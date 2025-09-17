@@ -58,12 +58,20 @@ const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown
     
 
 
-      const lastQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
+      // const lastQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
+      const allQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
+
+
       const allInterims = await InterimServices.getAllInterimsFromDB(query, user);
       const totalInterimValue = allInterims.result.map((interim:any) => interim.value).reduce((acc, interim) => acc + interim, 0);
-      const outStanding = lastQuote?.value ? lastQuote?.value - totalInterimValue : 0;
+      const outStanding = allQuote?.totalValue ? allQuote.totalValue - totalInterimValue : 0;
+
+        query = {
+          projectId: query?.projectId
+        }
       const allCost = await LiveProjectCostServices.getAllTypeLiveProjectCostsFromDB(query);
       const totalCost = allCost.result.find((e:any) => e.name === 'Total');
+
       const profit = totalCost?.amount ? totalInterimValue - totalCost?.amount : 0;
 
 
@@ -77,7 +85,7 @@ const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown
     //   throw new AppError(httpStatus.NOT_FOUND, 'User not found');
     // }
      const paymentTrackerdata = {
-           quote:lastQuote,
+           quote:allQuote,
            interims:allInterims.result,
           outStanding
        }
@@ -88,9 +96,9 @@ const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown
 
   if(user?.role === 'superAdmin' || user?.role === 'primeAdmin') {
        const paymentTrackerdata = {
-           quote:lastQuote,
+           quote:allQuote,
            interims:allInterims.result,
-          outStanding,
+           outStanding,
            profit
        }
 
