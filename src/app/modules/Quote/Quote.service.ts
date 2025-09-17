@@ -105,53 +105,67 @@ const unShareQuoteIntoDB = async (
 };
 const lastQuoteIntoDB = async (
   projectId: string,
-  // sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
-  // user?: any
 ) => {
-  // const { userEmail } = user;
-
-  // const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
-  //   (user: any) => user?._id
-  // );
-
-  // if (!sharedBy) {
-  //   throw new Error('Shared by user not found');
-  // }
-
-  // const sharedEntries = sharedWith.map(entry => ({
-  //   userId: new Types.ObjectId(entry.userId),
-  //   role: entry.role,
-  //   sharedBy: new Types.ObjectId(sharedBy),
-  // }));
-
-  // const project = await Quote.findByIdAndUpdate(
-  //   quoteId,
-  //   { $addToSet: { sharedWith: { $each: sharedEntries } } },
-  //   { new: true }
-  // );
-
-  // if (!project) {
-  //   throw new Error('Project not found or update failed');
-  // }
-
-  // const project = await Quote.findByIdAndUpdate(
-  //   quoteId,
-  //   { $addToSet: { sharedWith: { $each: sharedEntries } } },
-  //   { new: true }
-  // );
-
-    const lastQuote = await Quote.findOne({
-      projectId,                 // filter by project
-      // isDeleted: false,          // not deleted
-      // "sharedWith.userId": userId // user has access
-    })
-      .sort({ createdAt: -1 }) 
 
 
-// console.log('lastQuote', lastQuote);
+    const allQuote = await Quote.find(
+      {projectId},
+       { title: 1, file: 1, value: 1 } // only these fields  
+    )
 
-  return lastQuote;
+      const totalValue = allQuote.reduce((sum, q) => sum + (q.value || 0), 0);
+
+
+  return {totalValue,
+    allQuote
+  };
 };
+// const lastQuoteIntoDB = async (
+//   projectId: string,
+//   // sharedWith: { userId: string; role: 'client' | 'basicAdmin' }[],
+//   // user?: any
+// ) => {
+//   // const { userEmail } = user;
+
+//   // const sharedBy = await User.isUserExistsByCustomEmail(userEmail).then(
+//   //   (user: any) => user?._id
+//   // );
+
+//   // if (!sharedBy) {
+//   //   throw new Error('Shared by user not found');
+//   // }
+
+//   // const sharedEntries = sharedWith.map(entry => ({
+//   //   userId: new Types.ObjectId(entry.userId),
+//   //   role: entry.role,
+//   //   sharedBy: new Types.ObjectId(sharedBy),
+//   // }));
+
+//   // const project = await Quote.findByIdAndUpdate(
+//   //   quoteId,
+//   //   { $addToSet: { sharedWith: { $each: sharedEntries } } },
+//   //   { new: true }
+//   // );
+
+//   // if (!project) {
+//   //   throw new Error('Project not found or update failed');
+//   // }
+
+//   // const project = await Quote.findByIdAndUpdate(
+//   //   quoteId,
+//   //   { $addToSet: { sharedWith: { $each: sharedEntries } } },
+//   //   { new: true }
+//   // );
+
+//     const lastQuote = await Quote.findOne({
+//       projectId,                 // filter by project
+//       // isDeleted: false,          // not deleted
+//       // "sharedWith.userId": userId // user has access
+//     })
+//       .sort({ createdAt: -1 }) 
+
+//   return lastQuote;
+// };
 
 const getAllQuotesFromDB = async (query: Record<string, unknown>, user?: any) => {
 
