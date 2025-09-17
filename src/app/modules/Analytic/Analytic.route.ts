@@ -12,6 +12,11 @@ router.post(
 );
 
 router.get(
+  '/get-all-analytics-combined',
+  AnalyticControllers.getAllAnalyticsCombined,
+);
+
+router.get(
   '/:id',
   AnalyticControllers.getSingleAnalytic,
 );
@@ -27,9 +32,6 @@ router.delete(
   AnalyticControllers.deleteAnalytic,
 );
 
-router.get(
-  '/',
-  AnalyticControllers.getAllAnalyticsCombined,
-);
+
 
 export const AnalyticRoutes = router;

@@ -6,6 +6,7 @@ import AppError from '../../errors/AppError';
 import mongoose from 'mongoose';
 import { TAnalytic } from './Analytic.interface';
 import { Analytic } from './Analytic.model';
+import { Project } from '../Project/Project.model';
 
 const createAnalyticIntoDB = async (
   payload: TAnalytic,
@@ -20,7 +21,14 @@ const createAnalyticIntoDB = async (
 };
 
 const getAllAnalyticsCombinedFromDB = async () => {
+console.log("Musaaaaaaaaaaaaaaaaa")
 
+    const result = await Project.find({
+    status: { $in: ["Completed", "Ongoing"] }
+  }).populate("analytics");
+  console.log("Musaaaaaaaaaaaaaaaaa", result)
+
+  return result;
   
  
 };
