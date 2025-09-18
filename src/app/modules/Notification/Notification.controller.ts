@@ -29,6 +29,7 @@ const getAllUnreadNotifications = catchAsync(async (req, res) => {
   });
 });
 
+
 const markNotificationAsRead = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await NotificationServices.markNotificationAsReadIntoDB(id, req.user);
@@ -55,5 +56,5 @@ export const NotificationControllers = {
   createNotification,
   getAllUnreadNotifications,
   markNotificationsAsRead,
-  markNotificationAsRead
+  markNotificationAsRead,
 };

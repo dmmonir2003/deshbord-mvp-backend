@@ -7,6 +7,7 @@ import mongoose,{ Types } from 'mongoose';
 import { TDocumentFile } from './DocumentFile.interface';
 import { DocumentFile } from './DocumentFile.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createDocumentFileIntoDB = async (
   payload: TDocumentFile,
@@ -22,6 +23,17 @@ const createDocumentFileIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create DocumentFile');
   }
+
+  const ndata = {
+    title: 'Document Creation',
+    message: "A Document created",
+    projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Document');
 
   return result;
 };

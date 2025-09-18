@@ -9,6 +9,7 @@ import { Project } from './Project.model';
 import { User } from '../User/user.model';
 import mongoose, { Types } from 'mongoose';
 import moment from 'moment';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createProjectIntoDB = async (
   payload: TProject,
@@ -23,6 +24,18 @@ const createProjectIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Project');
   }
+
+  
+        const ndata = {
+      title: 'Project Creation',
+      message: "A Project created",
+      // projectId:payload?.projectId,
+      readBy: []
+    }
+  
+    const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+    
+    if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return result;
 };
@@ -149,6 +162,64 @@ const getAllProjectsFromDB = async (query: Record<string, unknown>, user?: any) 
   }else{
   const ProjectQuery = new QueryBuilder(
     Project.find(),
+    query,
+  )
+    .search(PROJECT_SEARCHABLE_FIELDS)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await ProjectQuery.modelQuery;
+  const meta = await ProjectQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
+  }
+};
+const getAllProjectsWithoutPendingFromDB = async (query: Record<string, unknown>, user?: any) => {
+
+  if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
+  const { userEmail } = user;
+  const userId = await User.isUserExistsByCustomEmail(userEmail).then(
+    (user: any) => user?._id
+  );
+
+  if (!userId) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }  
+
+     const ProjectQuery = new QueryBuilder(
+    Project.find({
+        sharedWith: {
+          $elemMatch: {
+            userId: new Types.ObjectId(userId),
+            role: user?.role
+          }
+        },
+        status: { $in: ['completed', 'ongoing'] }  // Filter projects by status 
+      }),
+    query,
+  )
+    .search(PROJECT_SEARCHABLE_FIELDS)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await ProjectQuery.modelQuery;
+  const meta = await ProjectQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
+  
+  }else{
+  const ProjectQuery = new QueryBuilder(
+    Project.find({
+    status: { $in: ['completed', 'ongoing'] }  // Filter projects by status
+  }),
     query,
   )
     .search(PROJECT_SEARCHABLE_FIELDS)
@@ -345,6 +416,7 @@ export const ProjectServices = {
   deleteProjectFromDB,
   shareProjectIntoDB,
   unShareProjectIntoDB,
-  getEarningForProjectsOfMonthFromDB
+  getEarningForProjectsOfMonthFromDB,
+  getAllProjectsWithoutPendingFromDB
 
 };

@@ -7,6 +7,12 @@ import mongoose from 'mongoose';
 import { TAnalytic } from './Analytic.interface';
 import { Analytic } from './Analytic.model';
 import { Project } from '../Project/Project.model';
+import { InterimServices } from '../Interim/Interim.service';
+import { QuoteServices } from '../Quote/Quote.service';
+import { Interim } from '../Interim/Interim.model';
+import { LiveProjectCostServices } from '../LiveProjectCost/LiveProjectCost.service';
+import { Quote } from '../Quote/Quote.model';
+import { getAllProjectProfit, getSingleProjectProfit } from './Analytic.utils';
 
 const createAnalyticIntoDB = async (
   payload: TAnalytic,
@@ -21,42 +27,24 @@ const createAnalyticIntoDB = async (
 };
 
 const getAllAnalyticsCombinedFromDB = async () => {
-console.log("Musaaaaaaaaaaaaaaaaa")
-
-    const result = await Project.find({
-    status: { $in: ["Completed", "Ongoing"] }
-  }).populate("analytics");
-  console.log("Musaaaaaaaaaaaaaaaaa", result)
-
-  return result;
-  
- 
+    const totalProfit = await getAllProjectProfit()
+    return {totalProfit}
 };
 
 
-// const getAllAnalyticsCombinedFromDB = async (query: Record<string, unknown>) => {
-//   const AnalyticQuery = new QueryBuilder(
-//     Analytic.find(),
-//     query,
-//   )
-//     .search(AnalyticSearchableFields)
-//     .filter()
-//     .sort()
-//     .paginate()
-//     .fields();
 
-//   const result = await AnalyticQuery.modelQuery;
-//   const meta = await AnalyticQuery.countTotal();
-//   return {
-//     result,
-//     meta,
-//   };
-// };
 
-const getSingleAnalyticFromDB = async (id: string) => {
-  const result = await Analytic.findById(id);
+const getAllAnalyticsSingleProjectFromDB = async (id: string) => {
+  const allQuotes = await Quote.find({ projectId: id });
+  const totalQuoteeValue = allQuotes.reduce((sum, quote) => sum + quote.value, 0);
 
-  return result;
+  const profit = await getSingleProjectProfit(id)
+
+  
+
+
+
+  return {totalQuoteeValue, profit};
 };
 
 const updateAnalyticIntoDB = async (id: string, payload: any) => {
@@ -105,7 +93,7 @@ const deleteAnalyticFromDB = async (id: string) => {
 export const AnalyticServices = {
   createAnalyticIntoDB,
   getAllAnalyticsCombinedFromDB,
-  getSingleAnalyticFromDB,
   updateAnalyticIntoDB,
   deleteAnalyticFromDB,
+  getAllAnalyticsSingleProjectFromDB
 };

@@ -9,6 +9,7 @@ import { Note } from './Note.model';
 import  { Types } from 'mongoose';
 import { User } from '../User/user.model';
 import { Quote } from '../Quote/Quote.model';
+import { NotificationServices } from '../Notification/Notification.service';
 // import { Project } from '../Project/Project.model';
 
 const createNoteIntoDB = async (
@@ -27,6 +28,17 @@ const createNoteIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Note');
   }
+
+      const ndata = {
+    title: 'Note Creation',
+    message: "A Note created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return result;
 };

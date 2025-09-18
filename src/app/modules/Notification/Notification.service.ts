@@ -9,7 +9,7 @@ const createNotificationIntoDB = async (
   payload: TNotification,
 ) => {
   const result = await Notification.create(payload);
-  
+  console.log('musa')
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
   }
@@ -22,21 +22,20 @@ const getAllUnreadNotificationsFromDB = async (user: any) => {
   const currentUser = await User.findOne({email: userEmail});
   if(!currentUser) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
-//  if (currentUser.role === 'admin') {
-//   // Fetch notifications for the admin's subscriberId
-//   const allNotifications = await Notification.find({
-//     subscriberId: currentUser.subscriberId,
-//   }).sort({ createdAt: -1 }).lean().limit(20);
+ if (currentUser.role === 'superAdmin' || currentUser.role === 'primeAdmin') {
+  // Fetch notifications for the admin's subscriberId
+  const allNotifications = await Notification.find({
+  }).sort({ createdAt: -1 }).lean().limit(20);
 
-//   const response = allNotifications.map((notif) => ({
-//     ...notif,
-//     isRead: notif.readBy?.some(
-//       (entry: any) => entry?.toString() === currentUser._id.toString()
-//     ),
-//   }));
+  const response = allNotifications.map((notif) => ({
+    ...notif,
+    isRead: notif.readBy?.some(
+      (entry: any) => entry?.toString() === currentUser._id.toString()
+    ),
+  }));
 
-//   return response;
-// }
+  return response;
+}
 
 // if (currentUser.role === 'subscriber' || currentUser.role === 'superAdmin') {
 //   // Fetch notifications for the subscriber
@@ -52,12 +51,9 @@ const getAllUnreadNotificationsFromDB = async (user: any) => {
 //   }))
 //   return response;
 // }
-
 };
 
-export const getUnreadNotifications = async () => {
-  return await Notification.find({ isRead: false }).sort({ createdAt: -1 });
-};
+
 
 export const markNotificationsAsReadIntoDB = async (user: any) => {
   const { userEmail } = user;
@@ -80,11 +76,11 @@ export const markNotificationsAsReadIntoDB = async (user: any) => {
   // Only add markAsReadId if not already present in readBy
   await Notification.updateMany(
     {
-      subscriberId: targetSubscriberId,
-      readBy: { $ne: markAsReadId },
+      // subscriberId: targetSubscriberId,
+      readBy: { $ne: currentUser._id },
     },
     {
-      $push: { readBy: markAsReadId },
+      $push: { readBy: currentUser._id },
     }
   );
 };
@@ -100,18 +96,18 @@ if (!notification) {throw new AppError(404, 'Notification not found.')}
 
 
 
-//  if(currentUser.role === 'subscriber' || currentUser.role === 'superAdmin') {
-//      // Protect against cross-subscriber access
+ if(currentUser.role === 'primeAdmin' || currentUser.role === 'superAdmin') {
+     // Protect against cross-subscriber access
 // if (notification.subscriberId.toString() !== currentUser?._id?.toString()) {
 //   throw new AppError(403, 'Access denied');
 // }
 
-// if (!notification.readBy.includes(currentUser!._id)) {
-//   notification.readBy.push(currentUser!._id);
-//   await notification.save();
-// }
+if (!notification.readBy.includes(currentUser!._id)) {
+  notification.readBy.push(currentUser!._id);
+  await notification.save();
+}
 
-//  }
+ }
 
  
 //  if(currentUser.role === 'admin') {
@@ -141,7 +137,6 @@ return 'Notification marked as read.'
 export const NotificationServices = {
   createNotificationIntoDB,
   getAllUnreadNotificationsFromDB,
-  getUnreadNotifications,
   markNotificationAsReadIntoDB, 
-  markNotificationsAsReadIntoDB
+  markNotificationsAsReadIntoDB,
 };

@@ -58,8 +58,10 @@ const getAllPaymentTrackerElementsFromDB = async ( query: Record<string, unknown
     
 
 
+
       // const lastQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
       const allQuote = await QuoteServices.lastQuoteIntoDB(query?.projectId as any);
+
 
 
       const allInterims = await InterimServices.getAllInterimsFromDB(query, user);

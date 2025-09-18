@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TSiteReport } from './SiteReport.interface';
 import { SiteReport } from './SiteReport.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createSiteReportIntoDB = async (
   payload: TSiteReport,
@@ -39,6 +40,17 @@ const laborTeamFiles = files['LaborTeam']?.map((f:any) => f.location) || [];
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create SiteReport');
   }
+
+      const ndata = {
+    title: 'Site Report File Creation',
+    message: "A Site Report File created",
+    // projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+  
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Notification');
 
   return result;
 };

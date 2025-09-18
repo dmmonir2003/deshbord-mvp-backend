@@ -15,9 +15,9 @@ const createAnalytic = catchAsync(async (req, res) => {
   });
 });
 
-const getSingleAnalytic = catchAsync(async (req, res) => {
+const getAllAnalyticsSingleProject = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await AnalyticServices.getSingleAnalyticFromDB(id);
+  const result = await AnalyticServices.getAllAnalyticsSingleProjectFromDB(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -38,6 +38,7 @@ const getAllAnalyticsCombined = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 
 const updateAnalytic = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -66,8 +67,9 @@ const deleteAnalytic = catchAsync(async (req, res) => {
 
 export const AnalyticControllers = {
   createAnalytic,
-  getSingleAnalytic,
+  // getSingleAnalytic,
   getAllAnalyticsCombined,
   updateAnalytic,
   deleteAnalytic,
+  getAllAnalyticsSingleProject
 };

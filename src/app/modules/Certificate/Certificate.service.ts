@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose';
 import { TCertificate } from './Certificate.interface';
 import { Certificate } from './Certificate.model';
 import { User } from '../User/user.model';
+import { NotificationServices } from '../Notification/Notification.service';
 
 const createCertificateIntoDB = async (
   payload: TCertificate,
@@ -23,6 +24,17 @@ const createCertificateIntoDB = async (
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Certificate');
   }
+
+  const ndata = {
+    title: 'Certificate Creation',
+    message: "A certificate created",
+    projectId:payload?.projectId,
+    readBy: []
+  }
+
+  const createdData = await NotificationServices.createNotificationIntoDB(ndata)
+   
+  if(!createdData) throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Certificate');
 
   return result;
 };

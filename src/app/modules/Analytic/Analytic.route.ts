@@ -11,15 +11,23 @@ router.post(
   AnalyticControllers.createAnalytic,
 );
 
+// router.get(
+//   '/:id/get-all-analytics-single-project',
+//   AnalyticControllers.getAllAnalyticsSingleProject,
+// );
+
+router.get(
+  '/single-project-analytics/:id',
+  AnalyticControllers.getAllAnalyticsSingleProject,
+);
+
 router.get(
   '/get-all-analytics-combined',
   AnalyticControllers.getAllAnalyticsCombined,
 );
 
-router.get(
-  '/:id',
-  AnalyticControllers.getSingleAnalytic,
-);
+
+
 
 router.patch(
   '/:id',
