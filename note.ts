@@ -108,3 +108,33 @@
 // 3a+KpptdUTR2rOUGtzwcfPa4g0Q9vaBTFHaIrY48hgavVaARcxiMhjamp5lOxEIL
 // 3DSQlN63absj4bGYpQapCK1OypFj8GskQLxyGg3xUn1RGCnpp9EL
 // -----END RSA PRIVATE KEY-----
+
+
+
+
+
+// # # dependencies
+// # /node_modules
+// # /.pnp
+// # .pnp.js
+
+// # # testing
+// # /coverage
+
+// # # production
+// # /build
+
+// # # misc
+// # .DS_Store
+// # .env
+// # .env.local
+// # .env.development.local
+// # .env.test.local
+// # .env.production.local
+
+// # npm-debug.log*
+// # yarn-debug.log*
+// # yarn-error.log*
+// # yarn.lock
+// # # package-lock.json
+// # dependencies
