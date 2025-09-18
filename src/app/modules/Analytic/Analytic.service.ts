@@ -6,11 +6,6 @@ import AppError from '../../errors/AppError';
 import mongoose from 'mongoose';
 import { TAnalytic } from './Analytic.interface';
 import { Analytic } from './Analytic.model';
-import { Project } from '../Project/Project.model';
-import { InterimServices } from '../Interim/Interim.service';
-import { QuoteServices } from '../Quote/Quote.service';
-import { Interim } from '../Interim/Interim.model';
-import { LiveProjectCostServices } from '../LiveProjectCost/LiveProjectCost.service';
 import { Quote } from '../Quote/Quote.model';
 import { getAllProjectProfit, getSingleProjectProfit } from './Analytic.utils';
 
