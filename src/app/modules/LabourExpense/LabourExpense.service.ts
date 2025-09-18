@@ -46,7 +46,7 @@ const getAllLabourCostsFromDB = async ( query: Record<string, unknown>) => {
       { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
     ]);
   
-  console.log('totalData[0]?.totalAmount',totalData[0]?.totalAmount);
+
     return {
       totalAmount: totalData[0]?.totalAmount || 0,
     };

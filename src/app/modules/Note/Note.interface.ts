@@ -8,7 +8,7 @@ export type TNote = {
   file?: string;
   description?: string;
   date: string;
-  value?: number;
+  value: number;
   clientComment: string;
   adminComment: string; 
   status: 'pending' | 'approved' | 'rejected';

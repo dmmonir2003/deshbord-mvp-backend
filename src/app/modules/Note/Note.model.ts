@@ -8,7 +8,7 @@ const NoteSchema = new Schema<TNote, NoteModel>({
   file: { type: String },
   description: { type: String },
   date: { type: String, default: new Date().toISOString() }, // store date as string (could also use Date type if needed)
-  value: { type: Number },
+  value: { type: Number, required: true },
   clientComment: { type: String},
   adminComment: { type: String},
       status: {
