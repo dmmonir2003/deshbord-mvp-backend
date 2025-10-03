@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-certificate',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
    uploadFileS3(true).single('file'),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -39,12 +39,13 @@ router.post(
 
 router.get(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   CertificateControllers.getSingleCertificate,
 );
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
      uploadFileS3(true).single('file'),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -62,11 +63,13 @@ router.patch(
 
 router.delete(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   CertificateControllers.deleteCertificate,
 );
 
 router.get(
   '/',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   CertificateControllers.getAllCertificates,
 );
 

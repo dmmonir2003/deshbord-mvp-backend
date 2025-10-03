@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   '/create-document',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(createDocumentValidationSchema),
   DocumentControllers.createDocument,
 );
@@ -22,14 +22,14 @@ router.get(
 
 router.patch(
   '/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+      auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(updateDocumentValidationSchema),
   DocumentControllers.updateDocument,
 );
 
 router.delete(
   '/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   DocumentControllers.deleteDocument,
 );
 

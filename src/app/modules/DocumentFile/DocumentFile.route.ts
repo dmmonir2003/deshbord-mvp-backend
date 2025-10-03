@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-document-file',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+        auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
      uploadFileS3(true).single('file'),
      (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -47,7 +47,7 @@ router.get(
 
 router.patch(
   '/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
      uploadFileS3(true).single('file'),
    (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
@@ -65,7 +65,7 @@ router.patch(
 
 router.delete(
   '/:id',
-      auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   DocumentFileControllers.deleteDocumentFile,
 );
 

@@ -8,7 +8,7 @@ const LabourSchema = new Schema<TLabour, LabourModel>({
   position: { type: String },
   dayRate: { type: Number, required: true },
   UtrNinAddress: { type: String, required: true },
-  file: { type: String, required: true },
+  file: { type: String },
   isDeleted: { type: Boolean, default: false },
 });
 

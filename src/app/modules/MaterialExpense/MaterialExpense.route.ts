@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-material-expense',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).single('file'),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -27,18 +27,18 @@ router.post(
 );
 router.get(
   '/all-material-costs',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   MaterialExpenseControllers.getAllMaterialCosts,
 );
 router.get(
   '/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   MaterialExpenseControllers.getSingleMaterialExpense,
 );
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).single('file'),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -56,13 +56,13 @@ router.patch(
 
 router.delete(
   '/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   MaterialExpenseControllers.deleteMaterialExpense,
 );
 
 router.get(
   '/',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin,   USER_ROLE.client),
   MaterialExpenseControllers.getAllMaterialExpenses,
 );
 

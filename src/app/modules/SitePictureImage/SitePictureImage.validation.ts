@@ -9,7 +9,7 @@ export const createSitePictureImageValidationSchema = z.object({
 
 export const updateSitePictureImageValidationSchema = z.object({
   body: z.object({
-      file: z.array(z.string()).min(1).optional(),
+      file: z.array(z.string()).optional(),
       uploadDate: z.date().optional(),
       projectId: z.string().optional(),
       sitePictureFolderId: z.string().optional(),

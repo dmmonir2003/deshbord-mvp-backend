@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post(
   '/create-handover-combine',
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin,),
   validateRequest(createHandoverCombineValidationSchema),
   HandoverCombineControllers.createHandoverCombine,
 );
@@ -28,26 +29,31 @@ router.post(
 
 router.get(
   '/:id',
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   HandoverCombineControllers.getSingleHandoverCombine,
 );
 
 router.patch(
   '/:id',
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(updateHandoverCombineValidationSchema),
   HandoverCombineControllers.updateHandoverCombine,
 );
 
 router.delete(
   '/:id',
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   HandoverCombineControllers.deleteHandoverCombine,
 );
 
 router.get(
   '/',
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   HandoverCombineControllers.getAllHandoverCombines,
 );
 router.get(
   '/:id/combine-data',
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   HandoverCombineControllers.getAllHandoverCombinesData,
 );
 
