@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-site-report',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
 
   // uploadFileS3(true).array('file', 5),
      uploadFileS3(true).fields([
@@ -54,7 +54,7 @@ router.get(
 
 router.patch(
   '/:id',
-      auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
      uploadFileS3(true).fields([
   { name: 'overviewFile', maxCount: 5 },
   { name: 'weather', maxCount: 5 },
@@ -77,7 +77,7 @@ router.patch(
 
 router.delete(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SiteReportControllers.deleteSiteReport,
 );
 

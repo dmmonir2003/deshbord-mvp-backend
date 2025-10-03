@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-sub-contractor-expense',
-   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).single('file'),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -28,19 +28,19 @@ router.post(
 
 router.get(
   '/all-sub-contractor-costs',
-     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SubContractorControllers.getAllSubContractorCosts,
 );
 
 router.get(
   '/:id',
-     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SubContractorControllers.getSingleSubContractor,
 );
 
 router.patch(
   '/:id',
-     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).single('file'),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -58,13 +58,13 @@ router.patch(
 
 router.delete(
   '/:id',
-     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SubContractorControllers.deleteSubContractor,
 );
 
 router.get(
   '/',
-     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SubContractorControllers.getAllSubContractors,
 );
 

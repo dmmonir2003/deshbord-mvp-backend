@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-snagging',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).fields([
   { name: 'file', maxCount: 5 },
   { name: 'completeFile', maxCount: 5 }
@@ -44,12 +44,13 @@ router.post(
 
 router.get(
   '/:id',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SnaggingControllers.getSingleSnagging,
 );
 
 router.patch(
   '/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).fields([
   { name: 'file', maxCount: 5 },
   { name: 'completeFile', maxCount: 5 }
@@ -70,11 +71,13 @@ router.patch(
 
 router.delete(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SnaggingControllers.deleteSnagging,
 );
 
 router.get(
   '/',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SnaggingControllers.getAllSnaggings,
 );
 

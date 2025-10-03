@@ -11,7 +11,7 @@ import { uploadFileS3 } from '../../utils/UploaderS3';
 const router = express.Router();
 router.post(
   '/create-user',
-  auth(USER_ROLE.superAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     if (req.body.data) {
@@ -52,26 +52,26 @@ router.get(
 
 router.get(
   '/:id',
-  auth(USER_ROLE.superAdmin),
+   auth(USER_ROLE.superAdmin),
   UserControllers.getSingleUser,
 );
 
 router.post(
   '/change-status/:id',
-  auth(USER_ROLE.superAdmin),
+   auth(USER_ROLE.superAdmin),
 //   validateRequest(UserValidation.changeStatusValidationSchema),
   UserControllers.changeStatus,
 );
 
 router.get(
   '/',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, ),
   UserControllers.getAllUsers,
 );
 
 router.delete(
   '/:id',
-  auth(USER_ROLE.superAdmin),
+   auth(USER_ROLE.superAdmin),
   UserControllers.deleteUser,
 );
 

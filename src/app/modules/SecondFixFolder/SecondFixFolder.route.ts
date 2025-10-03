@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   '/create-second-fix-folder',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(createSecondFixFolderValidationSchema),
   SecondFixFolderControllers.createSecondFixFolder,
 );
@@ -22,14 +22,14 @@ router.get(
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(updateSecondFixFolderValidationSchema),
   SecondFixFolderControllers.updateSecondFixFolder,
 );
 
 router.delete(
   '/:id',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SecondFixFolderControllers.deleteSecondFixFolder,
 );
 
