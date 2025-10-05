@@ -1,6 +1,7 @@
 import { Interim } from "../Interim/Interim.model";
 import { LiveProjectCostServices } from "../LiveProjectCost/LiveProjectCost.service";
 import { Project } from "../Project/Project.model";
+import { subMonths, startOfDay } from 'date-fns';
 
 export const getAllProjectProfit = async () => {
   // Get all projects with status "completed" or "ongoing"
@@ -49,9 +50,63 @@ export const getSingleProjectProfit = async (id: string) => {
     const totalCost = allCost.result.find((e: any) => e.name === 'Total');
     // Calculate profit
     const profit = totalCost?.amount ? totalInterimValue - totalCost.amount : 0;
-  
-
 
 
   return profit;
 };
+
+export const getProjectsProfitByPeriod = async (months: number) => {
+  // 1. Compute timeframe start date
+  const startDate = startOfDay(subMonths(new Date(), months));
+  console.log('months',months);
+  console.log('startDate',startDate);
+  // 2. Find all projects that are ongoing or completed AND recently active
+  const projects = await Project.find({
+    status: { $in: ['ongoing', 'completed'] },
+    updatedAt: { $gte: startDate }, // only projects updated within timeframe
+  }).lean();
+  console.log('projects',projects);
+  if (!projects.length) return [];
+
+  // 3. Calculate profit for each project
+  const results = await Promise.all(
+    projects.map(async (project) => {
+      // Fetch all paid interims for this project updated within timeframe
+      const interims = await Interim.find({
+        projectId: project._id,
+        status: 'paid',
+        updatedAt: { $gte: startDate },
+        isDeleted: false,
+      }).lean();
+
+      const totalInterimValue = interims.reduce(
+        (sum, interim) => sum + (interim.value || 0),
+        0
+      );
+
+      // Fetch cost data within same timeframe
+      const query = { projectId: project._id, createdAt: { $gte: startDate } };
+      const allCost = await LiveProjectCostServices.getAllTypeLiveProjectCostsFromDB(query);
+      const totalCost = allCost.result.find((e: any) => e.name === 'Total');
+
+      const profit = totalCost?.amount
+        ? totalInterimValue - totalCost.amount
+        : totalInterimValue;
+
+      return {
+        projectId: project._id,
+        projectName: project.projectName,
+        status: project.status,
+        months,
+        startDate,
+        totalRevenue: totalInterimValue,
+        totalCost: totalCost?.amount || 0,
+        profit,
+      };
+    })
+  );
+
+  return results;
+};
+
+

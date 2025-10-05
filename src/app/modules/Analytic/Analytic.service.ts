@@ -12,7 +12,7 @@ import { QuoteServices } from '../Quote/Quote.service';
 import { Interim } from '../Interim/Interim.model';
 import { LiveProjectCostServices } from '../LiveProjectCost/LiveProjectCost.service';
 import { Quote } from '../Quote/Quote.model';
-import { getAllProjectProfit, getSingleProjectProfit } from './Analytic.utils';
+import { getAllProjectProfit, getProjectsProfitByPeriod, getSingleProjectProfit } from './Analytic.utils';
 
 const createAnalyticIntoDB = async (
   payload: TAnalytic,
@@ -30,6 +30,19 @@ const getAllAnalyticsCombinedFromDB = async () => {
     const totalProfit = await getAllProjectProfit()
     return {totalProfit}
 };
+const getAllAnalyticProfitByPeriodFromDB = async (months:any) => {
+
+  console.log('mmmmmmmmmmmmmmmmmm',months);
+
+  const mparsedMonth =  parseInt(months);
+  const totalProfits = await getProjectsProfitByPeriod(mparsedMonth)
+
+
+    // const totalProfit = totalProfits.reduce((sum, project) => sum + project.profit, 0);
+    const totalProfit = totalProfits.reduce((sum, project) => sum + project.profit, 0).toFixed(2);
+
+    return {totalProfit}
+};
 
 
 
@@ -39,8 +52,6 @@ const getAllAnalyticsSingleProjectFromDB = async (id: string) => {
   const totalQuoteeValue = allQuotes.reduce((sum, quote) => sum + quote.value, 0);
 
   const profit = await getSingleProjectProfit(id)
-
-  
 
 
 
@@ -95,5 +106,6 @@ export const AnalyticServices = {
   getAllAnalyticsCombinedFromDB,
   updateAnalyticIntoDB,
   deleteAnalyticFromDB,
-  getAllAnalyticsSingleProjectFromDB
+  getAllAnalyticsSingleProjectFromDB,
+  getAllAnalyticProfitByPeriodFromDB
 };

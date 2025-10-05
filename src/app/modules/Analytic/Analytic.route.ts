@@ -25,6 +25,10 @@ router.get(
   '/get-all-analytics-combined',
   AnalyticControllers.getAllAnalyticsCombined,
 );
+router.get(
+  '/get-analytics-profit-by-period',
+  AnalyticControllers.getAllAnalyticProfitByPeriod,
+);
 
 
 
