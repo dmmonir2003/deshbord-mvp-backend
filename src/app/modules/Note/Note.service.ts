@@ -14,8 +14,15 @@ import { NotificationServices } from '../Notification/Notification.service';
 
 const createNoteIntoDB = async (
   payload: TNote,
-  file?: any
+  file?: any,
+  usr?: any
 ) => {
+
+const user = await User.isUserExistsByCustomEmail(usr.userEmail as string)
+
+  if(!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
 
   if(file) {
     payload.file = file.location;
@@ -29,7 +36,8 @@ const createNoteIntoDB = async (
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Note');
   }
 
-      const ndata = {
+
+  const ndata = {
     title: 'Note Creation',
     message: "A Note created",
     // projectId:payload?.projectId,
@@ -109,7 +117,8 @@ const getAllNotesFromDB = async (query: Record<string, unknown>, user?: any) => 
 
   console.log('user', user);
 
-    if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
+    if( user?.role === 'client'  ) {
+    // if( user?.role === 'client' || user?.role === 'basicAdmin'  ) {
     const { userEmail } = user;
     const userId = await User.isUserExistsByCustomEmail(userEmail).then(
       (user: any) => user?._id

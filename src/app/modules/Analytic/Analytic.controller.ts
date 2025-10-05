@@ -38,6 +38,18 @@ const getAllAnalyticsCombined = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getAllAnalyticProfitByPeriod = catchAsync(async (req, res) => {
+  const { month } = req.query;
+  const result = await AnalyticServices.getAllAnalyticProfitByPeriodFromDB(month);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Analytics are retrieved successfully',
+    // meta: result.meta,
+    data: result,
+  });
+});
 
 
 const updateAnalytic = catchAsync(async (req, res) => {
@@ -71,5 +83,6 @@ export const AnalyticControllers = {
   getAllAnalyticsCombined,
   updateAnalytic,
   deleteAnalytic,
-  getAllAnalyticsSingleProject
+  getAllAnalyticsSingleProject,
+  getAllAnalyticProfitByPeriod
 };

@@ -30,6 +30,10 @@ router.get(
     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   AnalyticControllers.getAllAnalyticsCombined,
 );
+router.get(
+  '/get-analytics-profit-by-period',
+  AnalyticControllers.getAllAnalyticProfitByPeriod,
+);
 
 
 
