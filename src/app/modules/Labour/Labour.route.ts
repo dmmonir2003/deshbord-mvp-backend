@@ -58,7 +58,7 @@ router.delete(
 
 router.get(
   '/',
-    auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
   LabourControllers.getAllLabours,
 );
 

@@ -1,1 +1,1 @@
-export const LABOUR_SEARCHABLE_FIELDS = ['name', 'description', 'atcCodes'];
+export const LABOUR_SEARCHABLE_FIELDS = ['name', 'position'];

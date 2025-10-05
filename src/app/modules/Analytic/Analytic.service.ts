@@ -32,7 +32,6 @@ const getAllAnalyticsCombinedFromDB = async () => {
 };
 const getAllAnalyticProfitByPeriodFromDB = async (months:any) => {
 
-  console.log('mmmmmmmmmmmmmmmmmm',months);
 
   const mparsedMonth =  parseInt(months);
   const totalProfits = await getProjectsProfitByPeriod(mparsedMonth)
