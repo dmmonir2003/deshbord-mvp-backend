@@ -5,7 +5,7 @@ import { NoteServices } from './Note.service';
 
 const createNote = catchAsync(async (req, res) => {
   const NoteData = req.body;
-  const result = await NoteServices.createNoteIntoDB(NoteData, req.file);
+  const result = await NoteServices.createNoteIntoDB(NoteData, req.file, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
