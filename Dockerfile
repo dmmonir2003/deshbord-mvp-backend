@@ -1,34 +1,26 @@
-FROM node:22  AS builder
-# RUN apk add --no-cache python3 make g++ 
+# Build Stage
+FROM node:22 AS builder
+
 WORKDIR /app
 
-COPY package.json  ./
-COPY package-lock.json ./
-
-# RUN yarn cache clean
-# RUN npm cache clean --force
-
-# RUN yarn install --frozen-lockfile
-# RUN npm install --production
+# Install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
+# Copy the entire app source code and build the app
 COPY . .
-
-# RUN yarn build
 RUN npm run build
 
-FROM node:22 
+# Production Stage
+FROM node:22
 
 WORKDIR /app
 
-# Copy package.json is required for npm to run
-# COPY --from=builder /app/package.json ./
-
-# COPY --from=builder /app/node_modules ./node_modules
-# COPY --from=builder /app/dist ./dist
-
+# Copy necessary files from the builder stage to the final image
 COPY --from=builder /app/package.json /app/package-lock.json /app/dist /app/node_modules /app/
 
+# Expose the port
 EXPOSE 5001
 
-CMD ["npm","run", "start:prod"]
+# Start the app in production mode
+CMD ["npm", "run", "start:prod"]

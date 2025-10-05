@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post(
   '/create-site-picture',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(createSitePictureValidationSchema),
   SitePictureControllers.createSitePicture,
 );
@@ -28,22 +29,26 @@ router.post(
 
 router.get(
   '/:id',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SitePictureControllers.getSingleSitePicture,
 );
 
 router.patch(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(updateSitePictureValidationSchema),
   SitePictureControllers.updateSitePicture,
 );
 
 router.delete(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SitePictureControllers.deleteSitePicture,
 );
 
 router.get(
   '/',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SitePictureControllers.getAllSitePictures,
 );
 

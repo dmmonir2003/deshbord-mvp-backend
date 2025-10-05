@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   '/create-time-schedule',
-   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
      uploadFileS3(true).single('file'),
      (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -40,12 +40,13 @@ router.post(
 
 router.get(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   TimeScheduleControllers.getSingleTimeSchedule,
 );
 
 router.patch(
   '/:id',
-     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
    uploadFileS3(true).single('file'),
      (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
@@ -63,11 +64,13 @@ router.patch(
 
 router.delete(
   '/:id',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   TimeScheduleControllers.deleteTimeSchedule,
 );
 
 router.get(
   '/',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   TimeScheduleControllers.getAllTimeSchedules,
 );
 

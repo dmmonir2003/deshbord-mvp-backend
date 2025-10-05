@@ -5,12 +5,14 @@ import { createSitePictureImageValidationSchema, updateSitePictureImageValidatio
 // import auth from '../../middlewares/auth';
 // import { USER_ROLE } from '../User/user.constant';
 import { uploadFileS3 } from '../../utils/UploaderS3';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
 
 router.post(
   '/create-site-picture-image',
-  // auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
    uploadFileS3(true).array('file', 5),
   //  uploadFileS3(true).single('file'),
    (req: Request, res: Response, next: NextFunction) => {
@@ -29,11 +31,13 @@ router.post(
 
 router.get(
   '/:id',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SitePictureImageControllers.getSingleSitePictureImage,
 );
 
 router.patch(
   '/:id',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   uploadFileS3(true).array('file', 5),
   //  uploadFileS3(true).single('file'),
    (req: Request, res: Response, next: NextFunction) => {
@@ -52,11 +56,13 @@ router.patch(
 
 router.delete(
   '/:id',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   SitePictureImageControllers.deleteSitePictureImage,
 );
 
 router.get(
   '/',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   SitePictureImageControllers.getAllSitePictureImages,
 );
 

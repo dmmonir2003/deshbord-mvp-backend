@@ -9,34 +9,39 @@ const router = express.Router();
 
 router.post(
   '/create-payment-tracker',
+     auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(createPaymentTrackerValidationSchema),
   PaymentTrackerControllers.createPaymentTracker,
 );
 
 router.get(
   '/all-element',
-  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.client),
+   auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   PaymentTrackerControllers.getAllPaymentTrackerElements,
 );
 
 router.get(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   PaymentTrackerControllers.getSinglePaymentTracker,
 );
 
 router.patch(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   validateRequest(updatePaymentTrackerValidationSchema),
   PaymentTrackerControllers.updatePaymentTracker,
 );
 
 router.delete(
   '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin),
   PaymentTrackerControllers.deletePaymentTracker,
 );
 
 router.get(
   '/',
+  auth(USER_ROLE.superAdmin, USER_ROLE.primeAdmin, USER_ROLE.basicAdmin, USER_ROLE.client),
   PaymentTrackerControllers.getAllPaymentTrackers,
 );
 

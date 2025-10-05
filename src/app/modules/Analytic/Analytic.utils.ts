@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Interim } from "../Interim/Interim.model";
 import { LiveProjectCostServices } from "../LiveProjectCost/LiveProjectCost.service";
 import { Project } from "../Project/Project.model";
