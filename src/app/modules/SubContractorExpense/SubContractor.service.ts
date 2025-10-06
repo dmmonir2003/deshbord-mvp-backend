@@ -155,19 +155,15 @@ if(file) {
     payload.file = file.location; // Assuming file.location contains the S3 URL
   }
 
-  const isDeletedService = await mongoose.connection
-    .collection('SubContractorExpense')
-    .findOne(
-      { _id: new mongoose.Types.ObjectId(id) }
-    );
+  const isDeletedService = SubContractor.findOne({ _id: id });
 
   if (!isDeletedService) {
     throw new Error('SubContractor not found');
   }
 
-  if (isDeletedService.isDeleted) {
-    throw new Error('Cannot update a deleted SubContractor');
-  }
+  // if (isDeletedService.isDeleted) {
+  //   throw new Error('Cannot update a deleted SubContractor');
+  // }
 
   const updatedData = await SubContractor.findByIdAndUpdate(
     { _id: id },
