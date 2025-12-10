@@ -5,7 +5,10 @@ import { SubContractorServices } from './SubContractor.service';
 
 const createSubContractor = catchAsync(async (req, res) => {
   const SubContractorData = req.body;
-  const result = await SubContractorServices.createSubContractorIntoDB(SubContractorData, req.file);
+  const result = await SubContractorServices.createSubContractorIntoDB(
+    SubContractorData,
+    req.file,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -28,7 +31,9 @@ const getSingleSubContractor = catchAsync(async (req, res) => {
 });
 
 const getAllSubContractors = catchAsync(async (req, res) => {
-  const result = await SubContractorServices.getAllSubContractorsFromDB(req.query);
+  const result = await SubContractorServices.getAllSubContractorsFromDB(
+    req.query,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -39,7 +44,9 @@ const getAllSubContractors = catchAsync(async (req, res) => {
   });
 });
 const getAllSubContractorCosts = catchAsync(async (req, res) => {
-  const result = await SubContractorServices.getAllSubContractorCostsFromDB(req.query);
+  const result = await SubContractorServices.getAllSubContractorCostsFromDB(
+    req.query,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -53,8 +60,14 @@ const getAllSubContractorCosts = catchAsync(async (req, res) => {
 
 const updateSubContractor = catchAsync(async (req, res) => {
   const { id } = req.params;
+  console.log('req.body', req.body);
+  console.log(id, 'subcontructor id ');
   const SubContractor = req.body;
-  const result = await SubContractorServices.updateSubContractorIntoDB(id, SubContractor, req.file);
+  const result = await SubContractorServices.updateSubContractorIntoDB(
+    id,
+    SubContractor,
+    req.file,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -82,5 +95,5 @@ export const SubContractorControllers = {
   getAllSubContractors,
   updateSubContractor,
   deleteSubContractor,
-  getAllSubContractorCosts
+  getAllSubContractorCosts,
 };

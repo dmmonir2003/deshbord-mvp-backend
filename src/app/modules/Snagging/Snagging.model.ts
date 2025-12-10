@@ -3,8 +3,8 @@ import { TSnagging, SnaggingModel } from './Snagging.interface';
 
 const SnaggingSchema = new Schema<TSnagging, SnaggingModel>({
   title: { type: String, required: true },
-  description: { type: String , required: true},
-  file: { type: [String] , required: true},
+  description: { type: String }, //TODO: Remove required
+  file: { type: [String], required: true },
   completeFile: { type: [String] },
   status: { type: Boolean, default: false },
   projectId: {
